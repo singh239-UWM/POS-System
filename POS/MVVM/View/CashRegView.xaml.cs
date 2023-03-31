@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace POS
+namespace POS.MVVM.View
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for CashRegView.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class CashRegView : UserControl
     {
-        public MainWindow()
+        public CashRegView()
         {
             InitializeComponent();
         }
