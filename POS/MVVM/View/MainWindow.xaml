@@ -16,8 +16,6 @@
         WindowStyle="None" 
         WindowStartupLocation="CenterScreen">
 
-   
-
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />

@@ -54,7 +54,6 @@
                         PlaceholderText="Enter UserID"
                         FontFamily="/Resources/Fonts/#IBM Plex Sans"
                         Width="270.5" FontSize="18"
-                        IsEnabled="{Binding IsEnabled}"
                         Text="{Binding UserID, Mode=TwoWay}" />
 
             <TextBlock Text="Password"
@@ -67,7 +66,7 @@
                             PlaceholderText="Enter Password"
                             FontFamily="/Resources/Fonts/#IBM Plex Sans"
                             FontSize="18"
-                            IsEnabled="{Binding IsEnabled}" Password="{Binding Password, Mode=TwoWay}" />
+                            Password="{Binding Password, Mode=TwoWay}" />
 
             <ui:Button Content="Login"
                        FontFamily="/Resources/Fonts/#IBM Plex Sans"
@@ -79,11 +78,10 @@
                        VerticalAlignment="Stretch" 
                        FontSize="18" 
                        IconForeground="#E4FFFFFF" 
-                       MouseOverBackground="#FF0E420A" 
+                       MouseOverBackground="#CC32936F" 
                        Cursor="Hand" 
-                       PressedBackground="#FF197312"
+                       PressedBackground="#7F32936F"
                        Command="{Binding Path=NavToCashRegViewComm}"
-                       IsEnabled="{Binding IsEnabled}"
                        />
 
             <Rectangle Height="2"

@@ -24,7 +24,7 @@ namespace POS
     /// </summary>
     public partial class MainWindow : Window
     {
-        private MySqlConnection conn = new MySqlConnection( "server=localhost;" + 
+        private MySqlConnection conn = new MySqlConnection( "server=virk-s;" + 
                                                             "user=ping;" + 
                                                             "database=POS_1;" + 
                                                             "port=3306;" + 

@@ -16,10 +16,14 @@
                 <view:LoginView />
             </DataTemplate>
 
-            <DataTemplate DataType="{x:Type viewModel:CashRegViewModel}">
+            <DataTemplate DataType="{x:Type viewModel:DashboardViewModel}">
                 <view:CashRegView />
             </DataTemplate>
-            
+
+            <DataTemplate DataType="{x:Type viewModel:CartViewModel}">
+                <view:CartView />
+            </DataTemplate>
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>

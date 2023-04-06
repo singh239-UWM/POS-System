@@ -1,7 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using MySql.Data.MySqlClient;
 using POS.Core;
 using POS.MVVM.ViewModel;
 using POS.Services;
+using POS.Store;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -30,7 +32,9 @@ namespace POS
 
             services.AddSingleton<MainViewModel>();
             services.AddSingleton<LoginViewModel>();
-            services.AddSingleton<CashRegViewModel>();
+            services.AddSingleton<DashboardViewModel>();
+            services.AddSingleton<CartViewModel>();
+            services.AddSingleton<ConnStore>();
 
             services.AddSingleton<INavigationService, NavigationService>();
 

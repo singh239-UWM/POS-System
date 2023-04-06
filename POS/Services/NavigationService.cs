@@ -15,17 +15,16 @@ namespace POS.Services
     public interface INavigationService
     {
         ViewModel CurrentView { get; }
+        ViewModel CartVM { get; }
         void NavigateTo<T>() where T : ViewModel;
-        void NavigateTo<T>(MySqlConnection conn) where T : ViewModel;
+        void ViewCartView<T>() where T : ViewModel;
     }
 
     public class NavigationService : ObservableObject, INavigationService
     {
         private ViewModel _currentView;
+        private ViewModel _cartVM;
         private Func<Type, ViewModel> _viewModelFactory;
-        private MySqlConnection _conn;
-
-        Timer _timer;
 
         public ViewModel CurrentView
         {
@@ -37,14 +36,17 @@ namespace POS.Services
             }
         }
 
-        private void DatabasePing(MySqlConnection conn)
+        public ViewModel CartVM
         {
-            if( conn.Ping() == false )
+            get { return _cartVM; }
+            private set
             {
-                conn.Close();
-                NavigateTo<LoginViewModel>();
+                _cartVM = value;
+                OnPropertyChanged();
             }
         }
+
+
 
         public NavigationService(Func<Type, ViewModel> viewModelFactory)
         {
@@ -58,14 +60,10 @@ namespace POS.Services
             CurrentView = viewModel;
         }
 
-        public void NavigateTo<TViewModel>(MySqlConnection conn) where TViewModel : ViewModel
+        public void ViewCartView<TViewModel>() where TViewModel : ViewModel
         {
             ViewModel viewModel = _viewModelFactory.Invoke(typeof(TViewModel));
-            CurrentView = viewModel;
-            _conn = conn;
-
-            _timer = new Timer(new TimerCallback((s) => DatabasePing(_conn)),
-                               null, TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(5));
+            CartVM = viewModel;
         }
     }
 }

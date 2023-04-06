@@ -1,6 +1,7 @@
 ﻿using MySql.Data.MySqlClient;
 using POS.Core;
 using POS.Services;
+using POS.Store;
 using System.Diagnostics;
 using System.Security;
 using System.Threading.Tasks;
@@ -9,7 +10,9 @@ namespace POS.MVVM.ViewModel
 {
     public class LoginViewModel : Core.ViewModel
     {
-        
+
+        private ConnStore _connStore;
+
         private string _loginMessage = "";
 
         private string _userID = "";
@@ -56,8 +59,10 @@ namespace POS.MVVM.ViewModel
 
         public RelayCommand NavToCashRegViewComm { get; set; }
 
-        public LoginViewModel(INavigationService navService)
+        public LoginViewModel(INavigationService navService, ConnStore connStore)
         {
+            _connStore = connStore;
+
             NavToCashRegViewComm = new RelayCommand( o => 
             {
 
@@ -69,21 +74,25 @@ namespace POS.MVVM.ViewModel
                                             "port=3306;" +
                                             "password=" + Password.ToString() + "");
 
-                Debug.WriteLine(UserID + " | " + Password.ToString());
+                //Debug.WriteLine(UserID + " | " + Password.ToString());
 
                 DatabaseConnService ds = new DatabaseConnService(conn);
 
                 if (ds.IsConnected == true)
                 {
-                    navService.NavigateTo<CashRegViewModel>(conn);
+                    _connStore.CurrentCon = conn;
+
+                    navService.NavigateTo<DashboardViewModel>();
                     UserID = "";
                     LoginMessage = "";
+
                 }
 
                 LoginMessage = "Login Failed";
                 Password = "";
 
             }, canExecute: o => true);
+
         }
     }
 }

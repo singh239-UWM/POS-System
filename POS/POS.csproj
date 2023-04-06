@@ -123,9 +123,18 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Core\ViewModel.cs" />
+    <Compile Include="MVVM\ViewModel\CartViewModel.cs" />
+    <Compile Include="MVVM\View\CartView.xaml.cs">
+      <DependentUpon>CartView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Services\DatabaseConnService.cs" />
     <Compile Include="Services\NavigationService.cs" />
-    <Page Include="MVVM\View\CashRegView.xaml">
+    <Compile Include="Store\ConnStore.cs" />
+    <Page Include="MVVM\View\CartView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MVVM\View\DashboardView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -139,9 +148,9 @@
     </Compile>
     <Compile Include="Core\ObservableObject.cs" />
     <Compile Include="Core\RelayCommand.cs" />
-    <Compile Include="MVVM\ViewModel\CashRegViewModel.cs" />
-    <Compile Include="MVVM\View\CashRegView.xaml.cs">
-      <DependentUpon>CashRegView.xaml</DependentUpon>
+    <Compile Include="MVVM\ViewModel\DashboardViewModel.cs" />
+    <Compile Include="MVVM\View\DashboardView.xaml.cs">
+      <DependentUpon>DashboardView.xaml</DependentUpon>
     </Compile>
     <Compile Include="MVVM\View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

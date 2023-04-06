@@ -10,7 +10,6 @@ namespace POS.MVVM.ViewModel
 {
     public class MainViewModel : Core.ViewModel
     {
-        public LoginViewModel LoginVM { get; set; }
         public DateTimeViewModel DateTimeVM { get; set; }
 
         private INavigationService _navigation;
