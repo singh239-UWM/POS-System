@@ -63,7 +63,7 @@ namespace POS.MVVM.ViewModel
 
                 MySqlConnection conn;
 
-                conn = new MySqlConnection("server=localhost;" +
+                conn = new MySqlConnection("server=virk-s;" +
                                             "user=" + UserID.ToString() + ";" +
                                             "database=POS_1;" +
                                             "port=3306;" +
