@@ -1,55 +1,45 @@
 ﻿using POS.Core;
-using Wpf.Ui.Common;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Input;
 using RelayUICommand = Wpf.Ui.Common.RelayCommand;
 using POS.Services;
 using RelayCommand = POS.Core.RelayCommand;
-using Wpf.Ui.Controls.Interfaces;
-using System.Windows.Forms;
+using POS.Store;
+using POS.MVVM.View;
+using POS.MVVM.Models;
 
 namespace POS.MVVM.ViewModel
 {
     public class CartViewModel : Core.ViewModel
     {
-        #region ReceiptItem class
-        public class ReceiptItem
-        {
-            public int Index { get; set; }
-            public string UPC { get; set; }
-            public string Description { get; set; }
-            public double Price { get; set; }
-            public int Quantity { get; set; }
-            public double TotalPrice { get; set; }
-            public ReceiptItem(int index, string upc, string description, double price, int quantity, double totalPrice = 0.00)
-            {
-                Index = index;
-                UPC = upc;
-                Description = description;
-                Price = price;
-                Quantity = quantity;
-                TotalPrice = price * quantity;
-            }
-        }
-        #endregion
+        private IWindowService _windowService;
+        private INavigationService _navigation;
 
-        private ObservableCollection<ReceiptItem> _receipt;
-        private ReceiptItem _selectedItem;
+        private ObservableCollection<Item> _receipt;
+        private ReceiptItemsStore _receipItemStore;
+        private Item _selectedItem;
         private string _upcEntered = "";
         private int _quantityEntered = 1;
         private ObservableCollection<double> _recptAmounts;
+        private ReceiptAmountStore _recptAmountStore;
+        private ReceiptAmountDueStore _recptAmtDueStore;
 
         public int INDEX = 0;
 
-        public ObservableCollection<ReceiptItem> Receipt
+        public INavigationService Navigation
+        {
+            get { return _navigation; }
+            set
+            {
+                _navigation = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public ObservableCollection<Item> Receipt
         {
             get
             {
@@ -58,7 +48,8 @@ namespace POS.MVVM.ViewModel
             set
             {
                 _receipt = value;
-                OnPropertyChanged();
+                _receipItemStore.ReceiptItems = _receipt;
+                //OnPropertyChanged();
             }
         }
 
@@ -82,11 +73,11 @@ namespace POS.MVVM.ViewModel
             }
         }
 
-        public ReceiptItem SelectedItem
+        public Item SelectedItem
         {
             get
             {
-                return (ReceiptItem)_selectedItem;
+                return (Item)_selectedItem;
             }
             set
             {
@@ -97,6 +88,7 @@ namespace POS.MVVM.ViewModel
             }
         }
 
+
         public ObservableCollection<double> RecptAmounts
         {
             get
@@ -106,21 +98,33 @@ namespace POS.MVVM.ViewModel
             set
             {
                 _recptAmounts = value;
+                _recptAmountStore.RecptAmount = _recptAmounts;
             }
         }
 
         public RelayCommand PlusQuanComm { get; set; }
         public RelayCommand MinusQuanComm { get; set; }
         public RelayCommand DeleteItemComm { get; set; }
+        public RelayCommand PayComm { get; set; }
+        public RelayCommand TaxFreeComm { get; set; }
 
-        public CartViewModel(INavigationService navService)
+        public CartViewModel(INavigationService navService, IWindowService windowService, 
+                             ReceiptAmountStore recptAmountStore, ReceiptItemsStore receiptItemsStore,
+                             ReceiptAmountDueStore recptAmtDueStore)
         {
+            Navigation = navService;
+            _windowService = windowService;
+            _recptAmountStore = recptAmountStore;
+            _receipItemStore = receiptItemsStore;
+            _recptAmtDueStore = recptAmtDueStore;
 
             PlusQuanComm = new RelayCommand(o => { PlusQuan(); }, canExecute: o => true);
             MinusQuanComm = new RelayCommand(o => { MinusQuan(); }, canExecute: o => true);
             DeleteItemComm = new RelayCommand(o => { DeleteItem(); }, canExecute: o => true);
+            PayComm = new RelayCommand(o => { Pay(); }, canExecute: o => true);
+            TaxFreeComm = new RelayCommand(o => { TaxFree(); }, canExecute: o => true);
 
-            Receipt = new ObservableCollection<ReceiptItem>();
+            Receipt = receiptItemsStore.ReceiptItems;
 
             //RecptAmounts[0] -> Subtotal
             //RecptAmounts[1] -> discount
@@ -133,6 +137,23 @@ namespace POS.MVVM.ViewModel
                 0.00,
                 0.00
             };
+
+        }
+
+        private void Pay()
+        {
+            if (RecptAmounts[3] == 0.00) { return; }
+
+            _recptAmountStore.UnChangeRecptAmount = RecptAmounts;
+            bool opned = _windowService.OpenPayWindow<PayViewModel>();
+            if(opned) 
+            {
+                _recptAmtDueStore.RecptDueAmount[0] = RecptAmounts[3];
+                _recptAmtDueStore.RecptDueAmount[1] = 0.00;
+                _recptAmtDueStore.RecptDueAmount[2] = RecptAmounts[3];
+                _recptAmtDueStore.RecptDueAmount[3] = 0.00;
+                Navigation.ChangeCustFaceView<CustFaceDueViewModel>();
+            }
         }
 
         private void DeleteItem()
@@ -140,6 +161,7 @@ namespace POS.MVVM.ViewModel
             if(Receipt.Count < 0) { return; }
 
             int index = Receipt.IndexOf(SelectedItem);
+            if(index < 0) { return; }
 
             int itemQuan = Receipt.ElementAt(index).Quantity;
 
@@ -203,6 +225,11 @@ namespace POS.MVVM.ViewModel
             }
         }
 
+        private void TaxFree()
+        {
+            RecptAmounts[2] = 0.00;
+        }
+
         #region UPC Textbox enter command
         private RelayUICommand _UPCEnterCommand;
         public ICommand UPCEnterCommand
@@ -221,12 +248,17 @@ namespace POS.MVVM.ViewModel
         private void UPCEnter()
         {
             if (UPCEntered == "") return;
+            if (Receipt.Count <= 0)
+            {
+                Navigation.ChangeCustFaceView<CustFaceTotalViewModel>();
+                INDEX = 0;
+            }
             ICollectionView view;
             //Debug.WriteLine(UPCEntered.ToString());
             QuantityEntered = 1;
             for (int i = 0; i < Receipt.Count; i++)
             {
-                if (Receipt.ElementAt<ReceiptItem>(i).UPC == UPCEntered)
+                if (Receipt.ElementAt<Item>(i).UPC == UPCEntered)
                 {
                     Receipt.ElementAt(i).Quantity += 1;
                     Receipt.ElementAt(i).TotalPrice = (Receipt.ElementAt(i).Quantity) * (Receipt.ElementAt(i).Price);
@@ -246,7 +278,7 @@ namespace POS.MVVM.ViewModel
                     return;
                 }
             }
-            Receipt.Add(new ReceiptItem(INDEX++, UPCEntered, "Turkey", 1.99, 1));
+            Receipt.Add(new Item(INDEX++, UPCEntered, "Turkey", 1.99, 1));
 
             RecptAmounts[0] += 1.99;
             RecptAmounts[2] += 1.99 * 0.055;

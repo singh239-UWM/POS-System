@@ -24,6 +24,21 @@
                 <view:CartView />
             </DataTemplate>
 
+            <DataTemplate DataType="{x:Type viewModel:PayViewModel}">
+                <view:PayView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModel:CustFaceTotalViewModel}">
+                <view:CustFaceTotalView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModel:CustFaceDueViewModel}">
+                <view:CustFaceDueView />
+            </DataTemplate>
+            <!--<DataTemplate DataType="{x:Type viewModel:CustFaceViewModel}">
+                <view:CustomerFaceView />
+            </DataTemplate>-->
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>

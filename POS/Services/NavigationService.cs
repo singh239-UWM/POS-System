@@ -12,18 +12,12 @@ using Wpf.Ui.Mvvm.Interfaces;
 
 namespace POS.Services
 {
-    public interface INavigationService
-    {
-        ViewModel CurrentView { get; }
-        ViewModel CartVM { get; }
-        void NavigateTo<T>() where T : ViewModel;
-        void ViewCartView<T>() where T : ViewModel;
-    }
-
+ 
     public class NavigationService : ObservableObject, INavigationService
     {
         private ViewModel _currentView;
         private ViewModel _cartVM;
+        private ViewModel _custFaceVM;
         private Func<Type, ViewModel> _viewModelFactory;
 
         public ViewModel CurrentView
@@ -46,7 +40,15 @@ namespace POS.Services
             }
         }
 
-
+        public ViewModel CustFaceVM
+        {
+            get { return _custFaceVM; }
+            set
+            {
+                _custFaceVM = value;
+                OnPropertyChanged();
+            }
+        }
 
         public NavigationService(Func<Type, ViewModel> viewModelFactory)
         {
@@ -64,6 +66,12 @@ namespace POS.Services
         {
             ViewModel viewModel = _viewModelFactory.Invoke(typeof(TViewModel));
             CartVM = viewModel;
+        }
+
+        public void ChangeCustFaceView<TViewModel>() where TViewModel : ViewModel
+        {
+            ViewModel viewModel = _viewModelFactory.Invoke(typeof(TViewModel));
+            CustFaceVM = viewModel;
         }
     }
 }

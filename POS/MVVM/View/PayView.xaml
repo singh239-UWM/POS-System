@@ -1,0 +1,479 @@
+﻿<UserControl x:Class="POS.MVVM.View.PayView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:local="clr-namespace:POS.MVVM.View" 
+             xmlns:viewmodel="clr-namespace:POS.MVVM.ViewModel" 
+             d:DataContext="{d:DesignInstance Type=viewmodel:PayViewModel}"
+             mc:Ignorable="d"
+             >
+    <Border CornerRadius="2,2,2,2" BorderBrush="#FF32936F" BorderThickness="2,2,2,2">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="450" />
+                <ColumnDefinition Width="450" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="450" />
+                <RowDefinition Height="15" />
+                <RowDefinition Height="80" />
+            </Grid.RowDefinitions>
+
+            <ContentControl Grid.Column="1" Grid.Row="0"
+                            Content="{Binding Navigation.CustFaceVM}" Margin="8,8,8,8">
+
+            </ContentControl>
+
+            <!--#region key pad-->
+            <Grid Margin="4,4,4,4" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="75" />
+                    <RowDefinition Height="15" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Grid>
+                    <TextBlock Text="Enter Amount Recieved"
+                       Foreground="#FF004346"
+                       FontFamily="/Resources/Fonts/#IBM Plex Sans"
+                       HorizontalAlignment="Left" 
+                       FontSize="18"/>
+                    <ui:TextBox x:Name="amountTenderedField"
+                                FontFamily="/Resources/Fonts/#IBM Plex Sans" FontSize="24"
+                                Text="{Binding AmountEntered,  Mode=TwoWay}" 
+                                VerticalAlignment="Stretch" 
+                                Margin="0,10,0,0" Height="45" PlaceholderEnabled="False" 
+                                TextAlignment="Right" IsHitTestVisible="False"/>
+                </Grid>
+
+                <!--#region keypads-->
+                <Grid Grid.Row="3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="10" />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+
+                    <!--Button "-"-->
+                    <ui:Button Grid.Column="0" Grid.Row="0"
+                               Command="{Binding NegAmtCommand}"
+                               CommandParameter="-"
+                               FontFamily="/Resources/Fonts/#IBM Plex Sans"
+                               Content="-"
+                               FontSize="20"
+                               IconForeground="#E4FFFFFF"
+                               Background="{x:Null}"
+                               MouseOverBackground="#CC32936F"
+                               PressedBackground="#7F32936F"
+                               VerticalAlignment="Stretch"
+                               HorizontalAlignment="Stretch" 
+                               Margin="2,2,2,2" Padding="8,8,8,8"
+                               BorderBrush="#FF32936F" 
+                               Foreground="#FF004346"
+                               BorderThickness="2,2,2,2" />
+                    
+                    <!--Button "CL"-->
+                    <ui:Button Grid.Column="1"
+                               Command="{Binding KeyboardDolAmtComm}"
+                               CommandParameter="CL"
+                               FontFamily="/Resources/Fonts/#IBM Plex Sans SemiBold"
+                               Content="Clear"
+                               Background="{x:Null}" 
+                               FontSize="20"
+                               IconForeground="#E4FFFFFF" 
+                               MouseOverBackground="#CC32936F"
+                               PressedBackground="#7F32936F"
+                               VerticalAlignment="Stretch"
+                               HorizontalAlignment="Stretch" 
+                               Margin="2,2,2,2" Padding="8,8,8,8" 
+                               BorderBrush="#FF32936F" 
+                               Foreground="#FF004346"
+                               BorderThickness="2,2,2,2" 
+                               Grid.ColumnSpan="2"  />
+
+                    <!--Button "Cash"-->
+                    <ui:Button Grid.Column="4"
+                               Command="{Binding CashCommand}" 
+                               Content="Cash"
+                               FontSize="20"
+                               IconForeground="#E4FFFFFF"
+                               Background="#FF32936F"
+                               MouseOverBackground="#CC32936F"
+                               PressedBackground="#7F32936F"
+                               VerticalAlignment="Stretch"
+                               HorizontalAlignment="Stretch" 
+                               Margin="2,2,2,2" Padding="8,8,8,8" 
+                               Foreground="#E4FFFFFF"
+                               BorderThickness="2,2,2,2"
+                               Grid.ColumnSpan="2" />
+
+                    <!--Button "7"-->
+                    <ui:Button Grid.Column="0" Grid.Row="1"
+                               Command="{Binding KeyboardDolAmtComm}"
+                               CommandParameter=""
+                               FontFamily="/Resources/Fonts/#IBM Plex Sans"
+                               Content="7"
+                               FontSize="20"
+                               IconForeground="#E4FFFFFF" 
+                               MouseOverBackground="#CC32936F"
+                               PressedBackground="#7F32936F"
+                               VerticalAlignment="Stretch"
+                               HorizontalAlignment="Stretch" 
+                               Margin="2,2,2,2" Padding="8,8,8,8"
+                               BorderBrush="#FF32936F" 
+                               Foreground="#FF004346"
+                               BorderThickness="2,2,2,2" Background="{x:Null}" />
+
+                    <!--Button "8"-->
+                    <ui:Button Grid.Column="1" Grid.Row="1"
+                               Command="{Binding KeyboardDolAmtComm}"
+                               CommandParameter="8"
+                               FontFamily="/Resources/Fonts/#IBM Plex Sans"
+                               Content="8"
+                               FontSize="20"
+                               IconForeground="#E4FFFFFF"
+                               Background="{x:Null}"
+                               MouseOverBackground="#CC32936F"
+                               PressedBackground="#7F32936F"
+                               VerticalAlignment="Stretch"
+                               HorizontalAlignment="Stretch" 
+                               Margin="2,2,2,2" Padding="8,8,8,8"
+                               BorderBrush="#FF32936F" 
+                               Foreground="#FF004346"
+                               BorderThickness="2,2,2,2" />
+
+                    <!--Button "9"-->
+                    <ui:Button Grid.Column="2" Grid.Row="1"
+                               Command="{Binding KeyboardDolAmtComm}"
+                               CommandParameter="9"
+                               FontFamily="/Resources/Fonts/#IBM Plex Sans"
+                               Content="9"
+                               FontSize="20"
+                               IconForeground="#E4FFFFFF"
+                               Background="{x:Null}"
+                               MouseOverBackground="#CC32936F"
+                               PressedBackground="#7F32936F"
+                               VerticalAlignment="Stretch"
+                               HorizontalAlignment="Stretch" 
+                               Margin="2,2,2,2" Padding="8,8,8,8"
+                               BorderBrush="#FF32936F" 
+                               Foreground="#FF004346"
+                               BorderThickness="2,2,2,2" />
+
+                    <!--Button "EBT"-->
+                    <ui:Button Grid.Column="4" Grid.Row="1" Grid.ColumnSpan="2"
+                           FontFamily="/Resources/Fonts/#IBM Plex Sans"
+                           Content="EBT"
+                           Background="#FF32936F" 
+                           Foreground="#E4FFFFFF" 
+                           FontSize="18"
+                           IconForeground="#E4FFFFFF" 
+                           MouseOverBackground="#CC32936F"
+                           PressedBackground="#7F32936F"
+                           VerticalAlignment="Stretch"
+                           HorizontalAlignment="Stretch" 
+                           Margin="2,2,2,2" Padding="8,8,8,8" />
+
+                    <!--Button "4"-->
+                    <ui:Button Grid.Column="0" Grid.Row="2"
+                               Command="{Binding KeyboardDolAmtComm}"
+                               CommandParameter="4"
+                               FontFamily="/Resources/Fonts/#IBM Plex Sans"
+                               Content="4"
+                               FontSize="20"
+                               IconForeground="#E4FFFFFF"
+                               Background="{x:Null}"
+                               MouseOverBackground="#CC32936F"
+                               PressedBackground="#7F32936F"
+                               VerticalAlignment="Stretch"
+                               HorizontalAlignment="Stretch" 
+                               Margin="2,2,2,2" Padding="8,8,8,8"
+                               BorderBrush="#FF32936F" 
+                               Foreground="#FF004346"
+                               BorderThickness="2,2,2,2" />
+
+                    <!--Button "5"-->
+                    <ui:Button Grid.Column="1" Grid.Row="2"
+                               Command="{Binding KeyboardDolAmtComm}"
+                               CommandParameter="5"
+                               FontFamily="/Resources/Fonts/#IBM Plex Sans"
+                               Content="5"
+                               FontSize="20"
+                               IconForeground="#E4FFFFFF"
+                               Background="{x:Null}"
+                               MouseOverBackground="#CC32936F"
+                               PressedBackground="#7F32936F"
+                               VerticalAlignment="Stretch"
+                               HorizontalAlignment="Stretch" 
+                               Margin="2,2,2,2" Padding="8,8,8,8"
+                               BorderBrush="#FF32936F"  
+                               Foreground="#FF004346"
+                               BorderThickness="2,2,2,2" />
+
+                    <!--Button "6"-->
+                    <ui:Button Grid.Column="2" Grid.Row="2"
+                               Command="{Binding KeyboardDolAmtComm}"
+                               CommandParameter="6"
+                               FontFamily="/Resources/Fonts/#IBM Plex Sans"
+                               Content="6"
+                               FontSize="20"
+                               IconForeground="#E4FFFFFF"
+                               Background="{x:Null}"
+                               MouseOverBackground="#CC32936F"
+                               PressedBackground="#7F32936F"
+                               VerticalAlignment="Stretch"
+                               HorizontalAlignment="Stretch" 
+                               Margin="2,2,2,2" Padding="8,8,8,8"
+                               BorderBrush="#FF32936F" 
+                               Foreground="#FF004346"
+                               BorderThickness="2,2,2,2" />
+
+                    <!--Button "Credit card"-->
+                    <ui:Button Grid.Column="4" Grid.Row="2" Grid.ColumnSpan="2"
+                               FontFamily="/Resources/Fonts/#IBM Plex Sans"
+                               Content="Credit/Debit"
+                               Background="#FF32936F" 
+                               Foreground="#E4FFFFFF" 
+                               FontSize="18"
+                               IconForeground="#E4FFFFFF" 
+                               MouseOverBackground="#CC32936F"
+                               PressedBackground="#7F32936F"
+                               VerticalAlignment="Stretch"
+                               HorizontalAlignment="Stretch" 
+                               Margin="2,2,2,2" Padding="8,8,8,8" />
+
+                    <!--Button "1"-->
+                    <ui:Button Grid.Column="0" Grid.Row="3"
+                               Command="{Binding KeyboardDolAmtComm}"
+                               CommandParameter="1"
+                               FontFamily="/Resources/Fonts/#IBM Plex Sans"
+                               Content="1"
+                               FontSize="20"
+                               IconForeground="#E4FFFFFF"
+                               Background="{x:Null}"
+                               MouseOverBackground="#CC32936F"
+                               PressedBackground="#7F32936F"
+                               VerticalAlignment="Stretch"
+                               HorizontalAlignment="Stretch" 
+                               Margin="2,2,2,2" Padding="8,8,8,8"
+                               BorderBrush="#FF32936F" 
+                               Foreground="#FF004346"
+                               BorderThickness="2,2,2,2" />
+
+                    <!--Button "2"-->
+                    <ui:Button Grid.Column="1" Grid.Row="3"
+                               Command="{Binding KeyboardDolAmtComm}"
+                               CommandParameter="2"
+                               FontFamily="/Resources/Fonts/#IBM Plex Sans"
+                               Content="2"
+                               FontSize="20"
+                               IconForeground="#E4FFFFFF"
+                               Background="{x:Null}"
+                               MouseOverBackground="#CC32936F"
+                               PressedBackground="#7F32936F"
+                               VerticalAlignment="Stretch"
+                               HorizontalAlignment="Stretch" 
+                               Margin="2,2,2,2" Padding="8,8,8,8"
+                               BorderBrush="#FF32936F" 
+                               Foreground="#FF004346"
+                               BorderThickness="2,2,2,2" />
+
+                    <!--Button "3"-->
+                    <ui:Button Grid.Column="2" Grid.Row="3"
+                               Command="{Binding KeyboardDolAmtComm}"
+                               CommandParameter="3"
+                               FontFamily="/Resources/Fonts/#IBM Plex Sans"
+                               Content="3"
+                               FontSize="20"
+                               IconForeground="#E4FFFFFF"
+                               Background="{x:Null}"
+                               MouseOverBackground="#CC32936F"
+                               PressedBackground="#7F32936F"
+                               VerticalAlignment="Stretch"
+                               HorizontalAlignment="Stretch" 
+                               Margin="2,2,2,2" Padding="8,8,8,8"
+                               BorderBrush="#FF32936F" 
+                               Foreground="#FF004346"
+                               BorderThickness="2,2,2,2" />
+
+                    <!--Button "00"-->
+                    <ui:Button Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2"
+                               Command="{Binding KeyboardDolAmtComm}"
+                               CommandParameter="00"
+                               FontFamily="/Resources/Fonts/#IBM Plex Sans"
+                               Content="00"
+                               FontSize="20"
+                               IconForeground="#E4FFFFFF"
+                               Background="{x:Null}"
+                               MouseOverBackground="#CC32936F"
+                               PressedBackground="#7F32936F"
+                               VerticalAlignment="Stretch"
+                               HorizontalAlignment="Stretch" 
+                               Margin="2,2,2,2" Padding="8,8,8,8"
+                               BorderBrush="#FF32936F"  
+                               Foreground="#FF004346"
+                               BorderThickness="2,2,2,2" />
+
+                    <!--Button "0"-->
+                    <ui:Button Grid.Column="2" Grid.Row="4"
+                               Command="{Binding KeyboardDolAmtComm}"
+                               CommandParameter="0"
+                               FontFamily="/Resources/Fonts/#IBM Plex Sans"
+                               Content="0"
+                               FontSize="20"
+                               IconForeground="#E4FFFFFF"
+                               Background="{x:Null}"
+                               MouseOverBackground="#CC32936F"
+                               PressedBackground="#7F32936F"
+                               VerticalAlignment="Stretch"
+                               HorizontalAlignment="Stretch" 
+                               Margin="2,2,2,2" Padding="8,8,8,8"
+                               BorderBrush="#FF32936F" 
+                               Foreground="#FF004346"
+                               BorderThickness="2,2,2,2" />
+                </Grid>
+                <!--#endregion-->
+
+            </Grid>
+            <!--#endregion-->
+
+            <!--#region Amount Button-->
+            <Grid Grid.Row="2" Grid.ColumnSpan="2" Margin="4,0,4,4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <!--$1 Button-->
+                <ui:Button Grid.Column="0"
+                           Command="{Binding PayDolAmtComm}"
+                           CommandParameter="1"
+                           FontFamily="/Resources/Fonts/#IBM Plex Sans"
+                           Content="$1"
+                           Background="#FF32936F" 
+                           Foreground="#E4FFFFFF" 
+                           FontSize="18"
+                           IconForeground="#E4FFFFFF" 
+                           MouseOverBackground="#CC32936F"
+                           PressedBackground="#7F32936F"
+                           VerticalAlignment="Stretch"
+                           HorizontalAlignment="Stretch" 
+                           Margin="3,0,3,8" Padding="8,8,8,8" />
+
+                <!--$5 Button-->
+                <ui:Button Grid.Column="1"
+                           Command="{Binding PayDolAmtComm}"
+                           CommandParameter="5"
+                           FontFamily="/Resources/Fonts/#IBM Plex Sans"
+                           Content="$5"
+                           Background="#FF32936F" 
+                           Foreground="#E4FFFFFF" 
+                           FontSize="18"
+                           IconForeground="#E4FFFFFF" 
+                           MouseOverBackground="#CC32936F"
+                           PressedBackground="#7F32936F"
+                           VerticalAlignment="Stretch"
+                           HorizontalAlignment="Stretch" 
+                           Margin="3,0,3,8" Padding="8,8,8,8" />
+
+                <!--$10 Button-->
+                <ui:Button Grid.Column="2"
+                           Command="{Binding PayDolAmtComm}"
+                           CommandParameter="10"
+                           FontFamily="/Resources/Fonts/#IBM Plex Sans"
+                           Content="$10"
+                           Background="#FF32936F" 
+                           Foreground="#E4FFFFFF" 
+                           FontSize="18"
+                           IconForeground="#E4FFFFFF" 
+                           MouseOverBackground="#CC32936F"
+                           PressedBackground="#7F32936F"
+                           VerticalAlignment="Stretch"
+                           HorizontalAlignment="Stretch" 
+                           Margin="3,0,3,8" Padding="8,8,8,8" />
+
+                <!--$20 Button-->
+                <ui:Button Grid.Column="3"
+                           Command="{Binding PayDolAmtComm}"
+                           CommandParameter="20"
+                           FontFamily="/Resources/Fonts/#IBM Plex Sans"
+                           Content="$20"
+                           Background="#FF32936F" 
+                           Foreground="#E4FFFFFF" 
+                           FontSize="18"
+                           IconForeground="#E4FFFFFF" 
+                           MouseOverBackground="#CC32936F"
+                           PressedBackground="#7F32936F"
+                           VerticalAlignment="Stretch"
+                           HorizontalAlignment="Stretch" 
+                           Margin="3,0,3,8" Padding="8,8,8,8" />
+
+                <!--$50 Button-->
+                <ui:Button Grid.Column="4"
+                           Command="{Binding PayDolAmtComm}"
+                           CommandParameter="50"
+                           FontFamily="/Resources/Fonts/#IBM Plex Sans"
+                           Content="$50"
+                           Background="#FF32936F" 
+                           Foreground="#E4FFFFFF" 
+                           FontSize="18"
+                           IconForeground="#E4FFFFFF" 
+                           MouseOverBackground="#CC32936F"
+                           PressedBackground="#7F32936F"
+                           VerticalAlignment="Stretch"
+                           HorizontalAlignment="Stretch" 
+                           Margin="3,0,3,8" Padding="8,8,8,8" />
+
+                <!--$100 Button-->
+                <ui:Button Grid.Column="5"
+                           Command="{Binding PayDolAmtComm}"
+                           CommandParameter="100"
+                           FontFamily="/Resources/Fonts/#IBM Plex Sans"
+                           Content="$100"
+                           Background="#FF32936F" 
+                           Foreground="#E4FFFFFF" 
+                           FontSize="18"
+                           IconForeground="#E4FFFFFF" 
+                           MouseOverBackground="#CC32936F"
+                           PressedBackground="#7F32936F"
+                           VerticalAlignment="Stretch"
+                           HorizontalAlignment="Stretch" 
+                           Margin="3,0,3,8" Padding="8,8,8,8" />
+
+                <!--Cancle Button-->
+                <ui:Button Grid.Column="6"
+                           Command="{Binding CancleCommand }"
+                           FontFamily="/Resources/Fonts/#IBM Plex Sans"
+                           Content="Cancle"
+                           Background="#FFB55656" 
+                           Foreground="#E4FFFFFF" 
+                           FontSize="18"
+                           IconForeground="#E4FFFFFF" 
+                           MouseOverBackground="#CC32936F"
+                           PressedBackground="#7F32936F"
+                           VerticalAlignment="Stretch"
+                           HorizontalAlignment="Stretch" 
+                           Margin="3,0,3,8" Padding="8,8,8,8" />
+            </Grid>
+            <!--#endregion-->
+        </Grid>
+
+    </Border>
+</UserControl>

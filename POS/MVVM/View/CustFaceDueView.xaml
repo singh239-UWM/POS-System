@@ -1,0 +1,94 @@
+﻿<UserControl x:Class="POS.MVVM.View.CustFaceDueView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:POS.MVVM.View"
+             xmlns:viewModel="clr-namespace:POS.MVVM.ViewModel"
+             d:DataContext="{d:DesignInstance Type=viewModel:CustFaceDueViewModel}"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Border Background="#FFE2E2E2" 
+                    BorderBrush="Black"
+                    CornerRadius="5,5,5,5">
+        <Grid >
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="35" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.5*" />
+                <ColumnDefinition Width="0.5*" />
+            </Grid.ColumnDefinitions>
+
+            <!--#region Total-->
+            <TextBlock Text="Total"
+                               Grid.Row="0" Grid.Column="0"
+                               Foreground="#FF004346"
+                               FontFamily="/Resources/Fonts/#IBM Plex Sans" 
+                               FontSize="18" HorizontalAlignment="Left" 
+                               Margin="10,0,0,0" VerticalAlignment="Center"/>
+
+            <TextBlock Text="{Binding RecptAmtDueStore.RecptDueAmount[0], StringFormat={}{0:C2}}"
+                               Grid.Row="0" Grid.Column="1"
+                               Foreground="#FF004346"
+                               FontFamily="/Resources/Fonts/#IBM Plex Sans" 
+                               FontSize="18" HorizontalAlignment="Right" 
+                               VerticalAlignment="Center" Margin="0,0,10,0"/>
+            <!--#endregion-->
+
+            <!--#region Amount Received-->
+            <TextBlock Text="Amount Received"
+                               Grid.Row="1" Grid.Column="0"
+                               Foreground="#FF004346"
+                               FontFamily="/Resources/Fonts/#IBM Plex Sans" 
+                               FontSize="18" 
+                               HorizontalAlignment="Left" Margin="10,0,0,0" 
+                               VerticalAlignment="Center"/>
+
+            <TextBlock Text="{Binding RecptAmtDueStore.RecptDueAmount[1], StringFormat={}{0:C2}}"
+                               Grid.Row="1" Grid.Column="1"
+                               Foreground="#FF004346"
+                               FontFamily="/Resources/Fonts/#IBM Plex Sans" 
+                               FontSize="18" HorizontalAlignment="Right" 
+                               VerticalAlignment="Center" Margin="0,0,10,0"/>
+            <!--#endregion-->
+
+            <!--#region Total-->
+            <TextBlock Text="Due"
+                               Grid.Row="2" Grid.Column="0"
+                               Foreground="#FF004346"
+                               FontFamily="/Resources/Fonts/#IBM Plex Sans" 
+                               FontSize="25" FontWeight="Bold" VerticalAlignment="Bottom" 
+                               HorizontalAlignment="Left" Margin="10,0,0,0"/>
+
+            <TextBlock Text="{Binding RecptAmtDueStore.RecptDueAmount[2], StringFormat={}{0:C2}}"
+                               Grid.Row="2" Grid.Column="1"
+                               Foreground="#FF004346"
+                               FontFamily="/Resources/Fonts/#IBM Plex Sans" 
+                               FontSize="30" HorizontalAlignment="Right" 
+                               VerticalAlignment="Center" Margin="0,0,10,0"/>
+            <!--#endregion-->
+
+            <!--#region Total-->
+            <TextBlock Text="Change"
+                               Grid.Row="3" Grid.Column="0"
+                               Foreground="#FF004346"
+                               FontFamily="/Resources/Fonts/#IBM Plex Sans" 
+                               FontSize="25" FontWeight="Bold" VerticalAlignment="Bottom" 
+                               HorizontalAlignment="Left" Margin="10,0,0,0"/>
+
+            <TextBlock Text="{Binding RecptAmtDueStore.RecptDueAmount[3], StringFormat={}{0:C2}}"
+                               Grid.Row="3" Grid.Column="1"
+                               Foreground="#FF004346"
+                               FontFamily="/Resources/Fonts/#IBM Plex Sans" 
+                               FontSize="30" HorizontalAlignment="Right" 
+                               VerticalAlignment="Center" Margin="0,0,10,0"/>
+            <!--#endregion-->
+        </Grid>
+    </Border>
+</UserControl>
