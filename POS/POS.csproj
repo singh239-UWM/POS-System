@@ -122,15 +122,45 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Core\INavigationService.cs" />
     <Compile Include="Core\ViewModel.cs" />
     <Compile Include="MVVM\ViewModel\CartViewModel.cs" />
+    <Compile Include="MVVM\ViewModel\CustFaceDueViewModel.cs" />
+    <Compile Include="MVVM\ViewModel\CustFaceTotalViewModel.cs" />
+    <Compile Include="MVVM\ViewModel\CustFaceViewModel.cs" />
+    <Compile Include="MVVM\ViewModel\PayViewModel.cs" />
     <Compile Include="MVVM\View\CartView.xaml.cs">
       <DependentUpon>CartView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MVVM\Models\Item.cs" />
+    <Compile Include="MVVM\View\CustFaceDueView.xaml.cs">
+      <DependentUpon>CustFaceDueView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\View\CustFaceTotalView.xaml.cs">
+      <DependentUpon>CustFaceTotalView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\View\PayView.xaml.cs">
+      <DependentUpon>PayView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\View\CustomerFaceWindow.xaml.cs">
+      <DependentUpon>CustomerFaceWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Services\DatabaseConnService.cs" />
     <Compile Include="Services\NavigationService.cs" />
+    <Compile Include="Services\WindowService.cs" />
     <Compile Include="Store\ConnStore.cs" />
+    <Compile Include="Store\ReceiptAmountDueStore.cs" />
+    <Compile Include="Store\ReceiptAmountStore.cs" />
+    <Compile Include="Store\ReceiptItemsStore.cs" />
     <Page Include="MVVM\View\CartView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MVVM\View\CustFaceDueView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MVVM\View\CustFaceTotalView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -157,6 +187,14 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="MVVM\View\LoginView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MVVM\View\PayView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MVVM\View\CustomerFaceWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -210,7 +248,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\" />
-    <Folder Include="MVVM\Model\" />
     <Folder Include="Themes\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

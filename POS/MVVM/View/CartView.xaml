@@ -172,91 +172,14 @@
             </Grid>
             <!--#endregion-->
 
-            <Border Background="#FFE2E2E2" 
-                    BorderBrush="Black"
-                    CornerRadius="5,5,5,5"
-                    Grid.Row="2">
-                <Grid >
+            <ContentControl Grid.Row="2"
+                            Content="{Binding Path=Navigation.CustFaceVM}">
+                
+            </ContentControl>
+            
+            
 
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="1*" />
-                    </Grid.RowDefinitions>
-
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="0.5*" />
-                        <ColumnDefinition Width="0.5*" />
-                    </Grid.ColumnDefinitions>
-
-                    <!--#region Subtotal-->
-                    <TextBlock Text="Subtotal"
-                               Grid.Row="0" Grid.Column="0"
-                               Foreground="#FF004346"
-                               FontFamily="/Resources/Fonts/#IBM Plex Sans" 
-                               FontSize="18" HorizontalAlignment="Left" 
-                               Margin="10,0,0,0" VerticalAlignment="Center"/>
-
-                    <TextBlock Text="{Binding RecptAmounts[0], StringFormat={}{0:C2}}"
-                               Grid.Row="0" Grid.Column="1"
-                               Foreground="#FF004346"
-                               FontFamily="/Resources/Fonts/#IBM Plex Sans" 
-                               FontSize="18" HorizontalAlignment="Right" 
-                               VerticalAlignment="Center" Margin="0,0,10,0"/>
-                    <!--#endregion-->
-
-                    <!--#region Discount-->
-                    <TextBlock Text="Discount"
-                               Grid.Row="1" Grid.Column="0"
-                               Foreground="#FF004346"
-                               FontFamily="/Resources/Fonts/#IBM Plex Sans" 
-                               FontSize="18" 
-                               HorizontalAlignment="Left" Margin="10,0,0,0" 
-                               VerticalAlignment="Center"/>
-
-                    <TextBlock Text="{Binding RecptAmounts[1], StringFormat={}{0:C2}}"
-                               Grid.Row="1" Grid.Column="1"
-                               Foreground="#FF004346"
-                               FontFamily="/Resources/Fonts/#IBM Plex Sans" 
-                               FontSize="18" HorizontalAlignment="Right" 
-                               VerticalAlignment="Center" Margin="0,0,10,0"/>
-                    <!--#endregion-->
-
-                    <!--#region Tax-->
-                    <TextBlock Text="Tax"
-                               Grid.Row="2" Grid.Column="0"
-                               Foreground="#FF004346"
-                               FontFamily="/Resources/Fonts/#IBM Plex Sans" 
-                               FontSize="18" HorizontalAlignment="Left" 
-                               Margin="10,0,0,0" VerticalAlignment="Center"/>
-
-                    <TextBlock Text="{Binding RecptAmounts[2], StringFormat={}{0:C2}}"
-                               Grid.Row="2" Grid.Column="1"
-                               Foreground="#FF004346"
-                               FontFamily="/Resources/Fonts/#IBM Plex Sans" 
-                               FontSize="18" HorizontalAlignment="Right" 
-                               VerticalAlignment="Center" Margin="0,0,10,0"/>
-                    <!--#endregion-->
-
-                    <!--#region Total-->
-                    <TextBlock Text="Total"
-                               Grid.Row="3" Grid.Column="0"
-                               Foreground="#FF004346"
-                               FontFamily="/Resources/Fonts/#IBM Plex Sans" 
-                               FontSize="30" FontWeight="Bold" VerticalAlignment="Bottom" 
-                               HorizontalAlignment="Left" Margin="10,0,0,0"/>
-
-                    <TextBlock Text="{Binding RecptAmounts[3], StringFormat={}{0:C2}}"
-                               Grid.Row="3" Grid.Column="1"
-                               Foreground="#FF004346"
-                               FontFamily="/Resources/Fonts/#IBM Plex Sans" 
-                               FontSize="30" HorizontalAlignment="Right" 
-                               VerticalAlignment="Center" Margin="0,0,10,0"/>
-                    <!--#endregion-->
-                </Grid>
-            </Border>
-
+            <!--#region Pay Grid-->
             <Grid Grid.Row="3" Margin="0,10,0,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*" />
@@ -270,7 +193,8 @@
                 </Grid.RowDefinitions>
 
                 <!--#region  Pay Button-->
-                <ui:Button Grid.Column="2" Grid.Row="1" 
+                <ui:Button Grid.Column="2" Grid.Row="1"
+                           Command="{Binding PayComm}"
                            FontFamily="/Resources/Fonts/#IBM Plex Sans"
                            Content="PAY"
                            Background="#32936F" 
@@ -303,6 +227,7 @@
 
                 <!--#region Tax Free -->
                 <ui:Button Grid.Column="1" Grid.Row="1"
+                           Command="{Binding TaxFreeComm}"
                            FontFamily="/Resources/Fonts/#IBM Plex Sans"
                            Content="Tax Free"
                            Background="{x:Null}" 
@@ -378,6 +303,7 @@
 
 
             </Grid>
+            <!--#endregion-->
 
 
 

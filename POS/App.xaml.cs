@@ -2,6 +2,7 @@
 using MySql.Data.MySqlClient;
 using POS.Core;
 using POS.MVVM.ViewModel;
+using POS.MVVM.View;
 using POS.Services;
 using POS.Store;
 using System;
@@ -30,13 +31,26 @@ namespace POS
                 DataContext = provider.GetRequiredService<MainViewModel>()
             });
 
+            services.AddSingleton<CustomerFaceWindow>(provider => new CustomerFaceWindow
+            {
+                DataContext = provider.GetRequiredService<CustFaceViewModel>()
+            });
+
             services.AddSingleton<MainViewModel>();
+            services.AddSingleton<CustFaceViewModel>();
             services.AddSingleton<LoginViewModel>();
             services.AddSingleton<DashboardViewModel>();
             services.AddSingleton<CartViewModel>();
+            services.AddSingleton<PayViewModel>();
+            services.AddSingleton<CustFaceTotalViewModel>();
+            services.AddSingleton<CustFaceDueViewModel>();
             services.AddSingleton<ConnStore>();
+            services.AddSingleton<ReceiptAmountStore>();
+            services.AddSingleton<ReceiptItemsStore>();
+            services.AddSingleton<ReceiptAmountDueStore>();
 
             services.AddSingleton<INavigationService, NavigationService>();
+            services.AddSingleton<IWindowService, WindowService>();
 
             services.AddSingleton<Func<Type, ViewModel>>( serviceProvider => viewModelType => (ViewModel)serviceProvider.GetRequiredService(viewModelType));
 
@@ -46,7 +60,9 @@ namespace POS
         protected override void OnStartup(StartupEventArgs e)
         {
             var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
+            var customerWindow = _serviceProvider.GetRequiredService<CustomerFaceWindow>();
             mainWindow.Show();
+            customerWindow.Show();
             base.OnStartup(e);
         }
     }
