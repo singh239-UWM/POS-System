@@ -194,6 +194,10 @@ namespace POS.MVVM.ViewModel
             {
                 SelectedItem = Receipt.ElementAt(INDEX - 1);
             }
+            else
+            {
+                IsTaxFree = false;
+            }
 
             ICollectionView view;
             view = CollectionViewSource.GetDefaultView(Receipt);
