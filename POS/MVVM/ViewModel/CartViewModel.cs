@@ -10,6 +10,7 @@ using RelayCommand = POS.Core.RelayCommand;
 using POS.Store;
 using POS.MVVM.View;
 using POS.MVVM.Models;
+using System;
 
 namespace POS.MVVM.ViewModel
 {
@@ -23,6 +24,8 @@ namespace POS.MVVM.ViewModel
         private Item _selectedItem;
         private string _upcEntered = "";
         private int _quantityEntered = 1;
+        private bool _isTaxFree = false;
+        private double _invoiceTax = 0.0;
         private ObservableCollection<double> _recptAmounts;
         private ReceiptAmountStore _recptAmountStore;
         private ReceiptAmountDueStore _recptAmtDueStore;
@@ -88,6 +91,15 @@ namespace POS.MVVM.ViewModel
             }
         }
 
+        public bool IsTaxFree
+        {
+            get { return (bool)_isTaxFree; }
+            set
+            {
+                _isTaxFree = value;
+                OnPropertyChanged();
+            }
+        }
 
         public ObservableCollection<double> RecptAmounts
         {
@@ -152,6 +164,11 @@ namespace POS.MVVM.ViewModel
                 _recptAmtDueStore.RecptDueAmount[1] = 0.00;
                 _recptAmtDueStore.RecptDueAmount[2] = RecptAmounts[3];
                 _recptAmtDueStore.RecptDueAmount[3] = 0.00;
+
+                UPCEntered = "";
+                IsTaxFree = false;
+                _invoiceTax = 0.0;
+
                 Navigation.ChangeCustFaceView<CustFaceDueViewModel>();
             }
         }
@@ -164,10 +181,10 @@ namespace POS.MVVM.ViewModel
             if(index < 0) { return; }
 
             int itemQuan = Receipt.ElementAt(index).Quantity;
-
+            double taxAmount = (itemQuan * Receipt.ElementAt(index).Price) * 0.055;
             RecptAmounts[0] -= (itemQuan * Receipt.ElementAt(index).Price);
-            RecptAmounts[2] -= (itemQuan * Receipt.ElementAt(index).Price * 0.055);
-            RecptAmounts[3] -= (itemQuan * (Receipt.ElementAt(index).Price + (Receipt.ElementAt(index).Price * 0.055)));
+            RecptAmounts[2] -= (IsTaxFree) ? 0.0 : (taxAmount);
+            RecptAmounts[3] -= (IsTaxFree) ? (itemQuan * Receipt.ElementAt(index).Price) : (itemQuan * (Receipt.ElementAt(index).Price + (taxAmount)));
 
 
             Receipt.RemoveAt(index);
@@ -176,6 +193,10 @@ namespace POS.MVVM.ViewModel
             if (Receipt.Count > 0)
             {
                 SelectedItem = Receipt.ElementAt(INDEX - 1);
+            }
+            else
+            {
+                IsTaxFree = false;
             }
 
             ICollectionView view;
@@ -190,12 +211,21 @@ namespace POS.MVVM.ViewModel
             if (Receipt.Count > 0)
             {
                 QuantityEntered -= 1;
-                Receipt.ElementAt(SelectedItem.Index).Quantity -= 1;
-                Receipt.ElementAt(SelectedItem.Index).TotalPrice -= Receipt.ElementAt(SelectedItem.Index).Price;
 
-                RecptAmounts[0] -= Receipt.ElementAt(SelectedItem.Index).Price;
-                RecptAmounts[2] -= Receipt.ElementAt(SelectedItem.Index).Price * 0.055;
-                RecptAmounts[3] -= (Receipt.ElementAt(SelectedItem.Index).Price + (Receipt.ElementAt(SelectedItem.Index).Price * 0.055));
+                //Spectial case when quan goes from 1 to 0
+                if(QuantityEntered == 0)
+                {
+                    QuantityEntered = -1;
+                }
+
+                double pricePerQuan = Receipt.ElementAt(SelectedItem.Index).Price * QuantityEntered;
+                Receipt.ElementAt(SelectedItem.Index).Quantity = QuantityEntered;
+                Receipt.ElementAt(SelectedItem.Index).TotalPrice = pricePerQuan;
+
+                RecptAmounts[0] = pricePerQuan;
+                RecptAmounts[2] = pricePerQuan * 0.055;
+                RecptAmounts[3] = (pricePerQuan + (pricePerQuan * 0.055));
+
 
                 ICollectionView view;
                 view = CollectionViewSource.GetDefaultView(Receipt);
@@ -210,12 +240,22 @@ namespace POS.MVVM.ViewModel
             if (Receipt.Count > 0)
             {
                 QuantityEntered += 1;
-                Receipt.ElementAt(SelectedItem.Index).Quantity += 1;
-                Receipt.ElementAt(SelectedItem.Index).TotalPrice += Receipt.ElementAt(SelectedItem.Index).Price;
 
-                RecptAmounts[0] += Receipt.ElementAt(SelectedItem.Index).Price;
-                RecptAmounts[2] += Receipt.ElementAt(SelectedItem.Index).Price * 0.055;
-                RecptAmounts[3] += (Receipt.ElementAt(SelectedItem.Index).Price + (Receipt.ElementAt(SelectedItem.Index).Price * 0.055));
+                //Spectial case when quan goes from -1 to 0
+                if (QuantityEntered == 0)
+                {
+                    QuantityEntered = 1;
+                }
+
+                double pricePerQuan = Receipt.ElementAt(SelectedItem.Index).Price * QuantityEntered;
+
+                Receipt.ElementAt(SelectedItem.Index).Quantity = QuantityEntered;
+                Receipt.ElementAt(SelectedItem.Index).TotalPrice = pricePerQuan;
+
+                RecptAmounts[0] = pricePerQuan;
+                RecptAmounts[2] = pricePerQuan * 0.055;
+                RecptAmounts[3] = (pricePerQuan + (pricePerQuan * 0.055));
+
 
                 ICollectionView view;
                 view = CollectionViewSource.GetDefaultView(Receipt);
@@ -227,7 +267,16 @@ namespace POS.MVVM.ViewModel
 
         private void TaxFree()
         {
-            RecptAmounts[2] = 0.00;
+            if (IsTaxFree)
+            {
+                RecptAmounts[2] = 0.00;
+                RecptAmounts[3] = RecptAmounts[0];
+            }
+            else
+            {
+                RecptAmounts[2] = _invoiceTax;
+                RecptAmounts[3] = RecptAmounts[0] + RecptAmounts[2];
+            }
         }
 
         #region UPC Textbox enter command
@@ -254,8 +303,9 @@ namespace POS.MVVM.ViewModel
                 INDEX = 0;
             }
             ICollectionView view;
-            //Debug.WriteLine(UPCEntered.ToString());
+
             QuantityEntered = 1;
+
             for (int i = 0; i < Receipt.Count; i++)
             {
                 if (Receipt.ElementAt<Item>(i).UPC == UPCEntered)
@@ -263,9 +313,13 @@ namespace POS.MVVM.ViewModel
                     Receipt.ElementAt(i).Quantity += 1;
                     Receipt.ElementAt(i).TotalPrice = (Receipt.ElementAt(i).Quantity) * (Receipt.ElementAt(i).Price);
 
+                    double taxPerItem = Receipt.ElementAt(i).Price * 0.055;
+
                     RecptAmounts[0] += Receipt.ElementAt(i).Price;
-                    RecptAmounts[2] += Receipt.ElementAt(i).Price * 0.055;
-                    RecptAmounts[3] += (Receipt.ElementAt(i).Price + (Receipt.ElementAt(i).Price * 0.055));
+                    RecptAmounts[2] = (IsTaxFree) ? 0.00 : (RecptAmounts[2] += taxPerItem);
+                    RecptAmounts[3] += (IsTaxFree) ? (Receipt.ElementAt(i).Price) : (Receipt.ElementAt(i).Price + taxPerItem);
+
+                    _invoiceTax += taxPerItem;
 
                     view = CollectionViewSource.GetDefaultView(Receipt);
                     view.Refresh();
@@ -281,8 +335,11 @@ namespace POS.MVVM.ViewModel
             Receipt.Add(new Item(INDEX++, UPCEntered, "Turkey", 1.99, 1));
 
             RecptAmounts[0] += 1.99;
-            RecptAmounts[2] += 1.99 * 0.055;
-            RecptAmounts[3] += (1.99 + (1.99 * 0.055));
+            RecptAmounts[2] = (IsTaxFree) ? 0.00 : (RecptAmounts[2] += 1.99 * 0.055);
+            RecptAmounts[3] += (IsTaxFree) ? 1.99 : (1.99 + (1.99 * 0.055));
+
+
+            _invoiceTax += (1.99 * 0.055);
 
             view = CollectionViewSource.GetDefaultView(RecptAmounts);
             view.Refresh();

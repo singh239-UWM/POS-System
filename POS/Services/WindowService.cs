@@ -22,7 +22,6 @@ namespace POS.Services
     public class WindowService : ObservableObject, IWindowService
     {
         private Window _currentWindow;
-        private bool _isOpen;
         private Func<Type, ViewModel> _viewModelFactory;
         public Window PayWindow
         {
