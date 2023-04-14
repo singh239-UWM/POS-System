@@ -226,19 +226,14 @@
                 <!--#endregion-->
 
                 <!--#region Tax Free -->
-                <ui:Button Grid.Column="1" Grid.Row="1"
+                <ToggleButton Grid.Column="1" Grid.Row="1"
                            Command="{Binding TaxFreeComm}"
                            FontFamily="/Resources/Fonts/#IBM Plex Sans"
                            Content="Tax Free"
-                           Background="{x:Null}" 
-                           Foreground="#FF32936F" 
-                           FontSize="16"
-                           IconForeground="#E4FFFFFF" 
-                           MouseOverBackground="#CC32936F" 
-                           Cursor="Hand" 
-                           PressedBackground="#7F32936F"
+                           FontSize="16" 
+                           Cursor="Hand"
                            VerticalAlignment="Bottom" 
-                           HorizontalAlignment="Stretch" Padding="5,5,5,5" Margin="4,4,0,0" BorderBrush="#FF004346" Height="50" />
+                           HorizontalAlignment="Stretch" Padding="5,5,5,5" Margin="4,4,0,0" Height="50" IsChecked="{Binding IsTaxFree}" />
                 <!--#endregion-->
 
                 <!--#region  Quant +/- -->
@@ -281,7 +276,7 @@
                                 SelectionBrush="#FF32936F" 
                                 Height="50" 
                                 MinHeight="50" 
-                                VerticalContentAlignment="Center" />
+                                VerticalContentAlignment="Center" IsReadOnly="True" />
 
                     <ui:Button Grid.Column="2" Grid.Row="0"
                                Command="{Binding PlusQuanComm}"

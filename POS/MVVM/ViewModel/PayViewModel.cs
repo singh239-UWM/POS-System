@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using Wpf.Ui.Controls.Interfaces;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace POS.MVVM.ViewModel
 {
@@ -82,7 +83,6 @@ namespace POS.MVVM.ViewModel
 
             RecptAmounts = _recptAmountStore.RecptAmount;
 
-
         }
         #endregion
 
@@ -94,6 +94,7 @@ namespace POS.MVVM.ViewModel
             {
                 AmountEntered = "0.00";
                 _amtEnteredStr = "";
+                _isNegSel = false;
                 return;
             }
 
@@ -111,10 +112,10 @@ namespace POS.MVVM.ViewModel
             }
             catch
             {
-                Debug.WriteLine("Error: Amount error");
                 // clear amounts
                 AmountEntered = "0.00";
                 _amtEnteredStr = "";
+                _isNegSel = false;
                 MessageBox.Show("Invalid Amount Entered");
                 return;
             }
@@ -140,10 +141,10 @@ namespace POS.MVVM.ViewModel
             }
             catch
             {
-                Debug.WriteLine("Error: Amount error");
                 // clear amounts
                 AmountEntered = "0.00";
                 _amtEnteredStr = "";
+                _isNegSel = false;
                 MessageBox.Show("Invalid Amount Entered");
                 return;
             }
@@ -169,6 +170,7 @@ namespace POS.MVVM.ViewModel
                         //amounts
                         AmountEntered = "0.00";
                         _amtEnteredStr = "";
+                        _isNegSel = false;
 
                         //close the pay window
                         _windowService.ClosePayWindow();
@@ -181,26 +183,56 @@ namespace POS.MVVM.ViewModel
                         //amounts
                         AmountEntered = "0.00";
                         _amtEnteredStr = "";
+                        _isNegSel = false;
                     }
                 }
                 else
                 {
                     MessageBox.Show("Invalid Cash Amount");
+                    AmountEntered = "0.00";
+                    _amtEnteredStr = "";
+                    _isNegSel = false;
                 }
             }
             else //Return Transaction
             {
                 if(amountEntered > 0) //cust gave money
                 {
-                    //need attention graber
-                    _recptAmtDueStore.RecptDueAmount[2] -= amountEntered;
+                    //attention graber
+                    string messageBoxText = "Do you want tender customer amount on RETURN?";
+                    string caption = "Return Amount";
+                    MessageBoxButton button = MessageBoxButton.YesNoCancel;
+                    MessageBoxImage icon = MessageBoxImage.Warning;
+                    MessageBoxResult result;
+
+                    result = MessageBox.Show(messageBoxText, caption, button, icon, MessageBoxResult.Yes);
+
+                    switch (result)
+                    {
+                        case MessageBoxResult.Cancel:
+                            break;
+                        case MessageBoxResult.Yes:
+                            _recptAmtDueStore.RecptDueAmount[2] -= amountEntered;
+                            break;
+                        case MessageBoxResult.No:
+                            break;
+                    }
+
+                    
+
+                    //clear entered amts
+                    AmountEntered = "0.00";
+                    _amtEnteredStr = "";
+                    _isNegSel = false;
                 }
                 else if(amountEntered < 0) //cashier is giving money to cust
                 {
-                    if((amountEntered - _recptAmtDueStore.RecptDueAmount[2]) == 0)
+                    double amountDue = Math.Round(_recptAmtDueStore.RecptDueAmount[2], 2);
+                    if((amountEntered - amountDue) == 0) // Amount due will be paid
                     {
                         _recptAmtDueStore.RecptDueAmount[1] += amountEntered;
-                        _recptAmtDueStore.RecptDueAmount[3] = _recptAmtDueStore.RecptDueAmount[1] - _recptAmtDueStore.RecptDueAmount[2];
+                        _recptAmtDueStore.RecptDueAmount[2] = 0;
+                        _recptAmtDueStore.RecptDueAmount[3] = -(_recptAmtDueStore.RecptDueAmount[1]);
 
                         //clear recipt
                         _recptItemStore.ReceiptItems.Clear();
@@ -212,16 +244,34 @@ namespace POS.MVVM.ViewModel
                         //amounts
                         AmountEntered = "0.00";
                         _amtEnteredStr = "";
+                        _isNegSel = false;
 
                         //close the pay window
                         _windowService.ClosePayWindow();
                     }
-                    _recptAmtDueStore.RecptDueAmount[1] += amountEntered;
-                    _recptAmtDueStore.RecptDueAmount[2] = _recptAmtDueStore.RecptDueAmount[2] - _recptAmtDueStore.RecptDueAmount[1];
+                    else if((amountEntered - amountDue) > 0)
+                    {
+                        _recptAmtDueStore.RecptDueAmount[1] += amountEntered;
+                        _recptAmtDueStore.RecptDueAmount[2] = _recptAmtDueStore.RecptDueAmount[2] - _recptAmtDueStore.RecptDueAmount[1];
+
+                        AmountEntered = "0.00";
+                        _amtEnteredStr = "";
+                        _isNegSel = false;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Invalid Cash Amount");
+                        AmountEntered = "0.00";
+                        _amtEnteredStr = "";
+                        _isNegSel = false;
+                    }
                 }
                 else
                 {
                     MessageBox.Show("Invalid Cash Amount");
+                    AmountEntered = "0.00";
+                    _amtEnteredStr = "";
+                    _isNegSel = false;
                 }
             }
 
