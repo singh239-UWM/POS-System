@@ -222,7 +222,8 @@
                            Cursor="Hand" 
                            PressedBackground="#7F32936F"
                            VerticalAlignment="Bottom" 
-                           HorizontalAlignment="Stretch" Margin="0,4,4,0" Padding="5,5,5,5" BorderBrush="#FFE56F6F" Height="50"/>
+                           HorizontalAlignment="Stretch" Margin="0,4,4,0" 
+                           Padding="5,5,5,5" BorderBrush="#FFE56F6F" Height="50"/>
                 <!--#endregion-->
 
                 <!--#region Tax Free -->

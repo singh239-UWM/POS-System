@@ -35,9 +35,14 @@
             <DataTemplate DataType="{x:Type viewModel:CustFaceDueViewModel}">
                 <view:CustFaceDueView />
             </DataTemplate>
-            <!--<DataTemplate DataType="{x:Type viewModel:CustFaceViewModel}">
-                <view:CustomerFaceView />
-            </DataTemplate>-->
+            
+            <DataTemplate DataType="{x:Type viewModel:ManualEntryViewModel}">
+                <view:ManualEntryView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModel:ProductConfigViewModel}">
+                <view:ProductConfigView />
+            </DataTemplate>
 
         </ResourceDictionary>
     </Application.Resources>

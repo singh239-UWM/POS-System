@@ -44,10 +44,13 @@ namespace POS
             services.AddSingleton<PayViewModel>();
             services.AddSingleton<CustFaceTotalViewModel>();
             services.AddSingleton<CustFaceDueViewModel>();
+            services.AddSingleton<ManualEntryViewModel>();
+            services.AddSingleton<ProductConfigViewModel>();
             services.AddSingleton<ConnStore>();
             services.AddSingleton<ReceiptAmountStore>();
             services.AddSingleton<ReceiptItemsStore>();
             services.AddSingleton<ReceiptAmountDueStore>();
+            services.AddSingleton<SelectedItemForConfigStore>();
 
             services.AddSingleton<INavigationService, NavigationService>();
             services.AddSingleton<IWindowService, WindowService>();

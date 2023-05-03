@@ -18,6 +18,7 @@ namespace POS.Services
         private ViewModel _currentView;
         private ViewModel _cartVM;
         private ViewModel _custFaceVM;
+        private ViewModel _dashboardTabVM;
         private Func<Type, ViewModel> _viewModelFactory;
 
         public ViewModel CurrentView
@@ -49,6 +50,15 @@ namespace POS.Services
                 OnPropertyChanged();
             }
         }
+        public ViewModel DashboardTabVM
+        {
+            get { return _dashboardTabVM; }
+            set
+            {
+                _dashboardTabVM = value;
+                OnPropertyChanged();
+            }
+        }
 
         public NavigationService(Func<Type, ViewModel> viewModelFactory)
         {
@@ -72,6 +82,11 @@ namespace POS.Services
         {
             ViewModel viewModel = _viewModelFactory.Invoke(typeof(TViewModel));
             CustFaceVM = viewModel;
+        }
+        public void NavigatDashBoardTabTo<TViewModel>() where TViewModel : ViewModel
+        {
+            ViewModel viewModel = _viewModelFactory.Invoke(typeof(TViewModel));
+            DashboardTabVM = viewModel;
         }
     }
 }

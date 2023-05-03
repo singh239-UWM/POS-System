@@ -11,6 +11,8 @@ namespace POS.Store
     {
         private ObservableCollection<double> _recptAmount;
         private ObservableCollection<double> _unChangeRecptAmount;
+        private bool _isTaxFree;
+        private double _taxAmtStore;
 
         public ObservableCollection<double> RecptAmount
         {
@@ -31,5 +33,8 @@ namespace POS.Store
                 OnPropertyChanged(nameof(UnChangeRecptAmount));
             }
         }
+
+        public double TaxAmtStore { get => _taxAmtStore; set => _taxAmtStore = value; }
+        public bool IsTaxFree { get => _isTaxFree; set => _isTaxFree = value; }
     }
 }

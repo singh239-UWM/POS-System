@@ -124,11 +124,14 @@
     </ApplicationDefinition>
     <Compile Include="Core\INavigationService.cs" />
     <Compile Include="Core\ViewModel.cs" />
+    <Compile Include="MVVM\Models\ItemForConfig.cs" />
     <Compile Include="MVVM\ViewModel\CartViewModel.cs" />
     <Compile Include="MVVM\ViewModel\CustFaceDueViewModel.cs" />
     <Compile Include="MVVM\ViewModel\CustFaceTotalViewModel.cs" />
     <Compile Include="MVVM\ViewModel\CustFaceViewModel.cs" />
+    <Compile Include="MVVM\ViewModel\ManualEntryViewModel.cs" />
     <Compile Include="MVVM\ViewModel\PayViewModel.cs" />
+    <Compile Include="MVVM\ViewModel\ProductConfigViewModel.cs" />
     <Compile Include="MVVM\View\CartView.xaml.cs">
       <DependentUpon>CartView.xaml</DependentUpon>
     </Compile>
@@ -139,11 +142,17 @@
     <Compile Include="MVVM\View\CustFaceTotalView.xaml.cs">
       <DependentUpon>CustFaceTotalView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MVVM\View\ManualEntryView.xaml.cs">
+      <DependentUpon>ManualEntryView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MVVM\View\PayView.xaml.cs">
       <DependentUpon>PayView.xaml</DependentUpon>
     </Compile>
     <Compile Include="MVVM\View\CustomerFaceWindow.xaml.cs">
       <DependentUpon>CustomerFaceWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\View\ProductConfigView.xaml.cs">
+      <DependentUpon>ProductConfigView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Services\DatabaseConnService.cs" />
     <Compile Include="Services\NavigationService.cs" />
@@ -152,6 +161,7 @@
     <Compile Include="Store\ReceiptAmountDueStore.cs" />
     <Compile Include="Store\ReceiptAmountStore.cs" />
     <Compile Include="Store\ReceiptItemsStore.cs" />
+    <Compile Include="Store\SelectedItemForConfigStore.cs" />
     <Page Include="MVVM\View\CartView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -190,11 +200,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="MVVM\View\ManualEntryView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MVVM\View\PayView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="MVVM\View\CustomerFaceWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MVVM\View\ProductConfigView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

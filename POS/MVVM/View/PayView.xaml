@@ -10,7 +10,7 @@
              mc:Ignorable="d"
              >
     <Border CornerRadius="2,2,2,2" BorderBrush="#FF32936F" BorderThickness="2,2,2,2">
-        <Grid>
+        <Grid Margin="5,5,5,5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="450" />
                 <ColumnDefinition Width="450" />
