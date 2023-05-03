@@ -13,21 +13,19 @@ using POS.Store;
 using POS.Services;
 using Wpf.Ui.Controls.Interfaces;
 using POS.Core;
+using System.Windows;
 
 namespace POS.MVVM.ViewModel
 {
     public class DashboardViewModel : Core.ViewModel
     {
-        
-
         Timer _timer;
 
         
 
         private ConnStore _connStore;
-
+        private IWindowService _windowService;
         private INavigationService _navigation;
-
         public INavigationService Navigation
         {
             get => _navigation;
@@ -38,13 +36,26 @@ namespace POS.MVVM.ViewModel
             }
         }
 
-        //public RelayCommand NavToCartViewComm { get; set; }
+
+        #region Commands
+        public RelayCommand OpenProdConfigComm { get; set; }
+        public RelayCommand NavigateToManualEntryView { get; set; }
+        public RelayCommand NavigateToOtherView { get; set; }
+        #endregion
+
 
         #region Constructor
-        public DashboardViewModel(ConnStore conn, INavigationService navService)
+        public DashboardViewModel(ConnStore conn, INavigationService navService, IWindowService windowService)
         {
             _connStore = conn;
-            Navigation = navService;
+            Navigation = navService; 
+            _windowService = windowService;
+
+            #region Commands Def assigning
+            OpenProdConfigComm = new RelayCommand(o => { OpenProdConfig(); }, canExecute: o => true);
+            NavigateToManualEntryView = new RelayCommand(o => { Navigation.NavigatDashBoardTabTo<ManualEntryViewModel>(); }, canExecute: o => true);
+            NavigateToOtherView = new RelayCommand(o => { Navigation.NavigatDashBoardTabTo<CartViewModel>(); }, canExecute: o => true);
+            #endregion
 
 
             //NavToCartViewComm = new RelayCommand(o => {
@@ -55,19 +66,43 @@ namespace POS.MVVM.ViewModel
 
             _timer = new Timer(new TimerCallback((s) => DatabasePing(_connStore.CurrentCon)),
                                null, TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(5));
+            
+        }
+        #endregion
+
+        #region Commands Def
+        private void OpenProdConfig()
+        {
+            bool isOpend = _windowService.OpenProdConfigWindow<ProductConfigViewModel>();
+            if (isOpend)
+            {
+                return;
+            }
+            else
+            {
+                MessageBox.Show("Could Not open Prod config window");
+            }
+
         }
         #endregion
 
         private void DatabasePing(MySqlConnection conn)
         {
-            Debug.WriteLine(conn.ConnectionString);
-            if (conn.Ping() == false)
+            //Debug.WriteLine(conn.ConnectionString);
+            try
             {
-                conn.Close();
-                if(Navigation.CurrentView.GetType() != typeof(LoginViewModel))
+                if (conn.Ping() == false)
                 {
-                    Navigation.NavigateTo<LoginViewModel>();
+                    conn.Close();
+                    if (Navigation.CurrentView.GetType() != typeof(LoginViewModel))
+                    {
+                        Navigation.NavigateTo<LoginViewModel>();
+                    }
+
                 }
+            }
+            catch (Exception ex)
+            {
                 
             }
         }

@@ -65,7 +65,7 @@
                           Grid.Row="2"
                           ItemsSource="{Binding RecptItemsStore.ReceiptItems}"
                           SelectionMode="Single"
-                          SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="9,0,-9,0">
+                          Margin="9,0,-9,0">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <Grid>

@@ -1,21 +1,19 @@
-﻿using POS.Core;
+﻿using MySql.Data.MySqlClient;
+using POS.Core;
+using POS.MVVM.Models;
 using POS.Services;
 using POS.Store;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Security.Cryptography;
 using System.Windows;
-using Wpf.Ui.Controls.Interfaces;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace POS.MVVM.ViewModel
 {
     public class PayViewModel : Core.ViewModel
     {
+        private ConnStore _connStore;
+
         private ReceiptAmountStore _recptAmountStore;
         private ReceiptAmountDueStore _recptAmtDueStore;
         private ReceiptItemsStore _recptItemStore;
@@ -66,7 +64,7 @@ namespace POS.MVVM.ViewModel
         #region constor
         public PayViewModel(ReceiptAmountStore recptAmountStore, ReceiptAmountDueStore recptAmtDueStore,
                             IWindowService windowService, INavigationService navService,
-                            ReceiptItemsStore recptItemStore)
+                            ReceiptItemsStore recptItemStore, ConnStore connStore)
         {
             CancleCommand = new RelayCommand(o => { Cancle(); }, canExecute: o => true);
             CashCommand = new RelayCommand(o => { PayDolAmt(AmountEntered); }, canExecute: o => true);
@@ -79,10 +77,10 @@ namespace POS.MVVM.ViewModel
             _recptAmountStore = recptAmountStore;
             _recptAmtDueStore = recptAmtDueStore;
             _recptItemStore = recptItemStore;
-
+            _connStore = connStore;
 
             RecptAmounts = _recptAmountStore.RecptAmount;
-
+            
         }
         #endregion
 
@@ -156,24 +154,124 @@ namespace POS.MVVM.ViewModel
                     bool isAmtBig = IsAmountBiggerThanTotal(amountEntered);
                     if (isAmtBig)
                     {
-                        _recptAmtDueStore.RecptDueAmount[1] += amountEntered;
-                        _recptAmtDueStore.RecptDueAmount[2] = 0.00;
-                        _recptAmtDueStore.RecptDueAmount[3] = _recptAmtDueStore.RecptDueAmount[1] - _recptAmtDueStore.RecptDueAmount[0];
+                        double amtTendered = _recptAmtDueStore.RecptDueAmount[1] + amountEntered;
+                        double change = amtTendered - _recptAmtDueStore.RecptDueAmount[0];
 
-                        //clear recipt
-                        _recptItemStore.ReceiptItems.Clear();
-                        for (int i = 0; i < 4; i++)
+                        #region making sql transaction
+                        MySqlTransaction transaction = null;
+
+                        try
                         {
-                            _recptAmountStore.RecptAmount[i] = 0.00;
+                            // Begin a new transaction
+                            transaction = _connStore.CurrentCon.BeginTransaction();
+
+                            long lastInsertedId = -1;
+                            
+                            //add receipt to sql
+                            string sqlAddRecptQuery = "INSERT INTO pos_1.receipt (recpt_emp, recpt_subTotal, recpt_tax, recpt_disc, recpt_total, recpt_due_amt_tend, recpt_due_change, recpt_date_time) " +
+                                                      "VALUES (@recpt_emp, @recpt_subTotal, @recpt_tax, @recpt_disc, @recpt_total, @recpt_due_amt_tend, @recpt_due_change, @recpt_date_time);";
+                            using (MySqlCommand cmd = new MySqlCommand(sqlAddRecptQuery, _connStore.CurrentCon))
+                            {
+                                cmd.Parameters.AddWithValue("@recpt_emp", Convert.ToInt16(_connStore.UserID));
+                                cmd.Parameters.AddWithValue("@recpt_subTotal", _recptAmountStore.RecptAmount[0]);
+                                cmd.Parameters.AddWithValue("@recpt_disc", _recptAmountStore.RecptAmount[1]);
+                                cmd.Parameters.AddWithValue("@recpt_tax", _recptAmountStore.RecptAmount[2]);
+                                cmd.Parameters.AddWithValue("@recpt_total", _recptAmountStore.RecptAmount[3]);
+                                cmd.Parameters.AddWithValue("@recpt_due_amt_tend", amtTendered);
+                                cmd.Parameters.AddWithValue("@recpt_due_change", change);
+                                cmd.Parameters.AddWithValue("@recpt_date_time", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+
+                                // Execute the query and get the last inserted ID
+                                Convert.ToInt32(cmd.ExecuteScalarAsync().Result);
+                                lastInsertedId = cmd.LastInsertedId;
+
+                                //lastInsertedId = cmd.LastInsertedId;
+                            }
+
+                            if(lastInsertedId < 0)
+                            {
+                                _windowService.ClosePayWindow();
+                                return;
+                            }
+
+                            //add each item to from receipt to database
+                            string sqlAddRecptItems = "INSERT INTO pos_1.product_to_receipt (recpt_id, prod_upc, prod_desc, prod_price, prod_quan, prod_tot_Price) " +
+                                           "VALUES (@recpt_id, @prod_upc, @prod_desc, @prod_price, @prod_quan, @prod_tot_Price);";
+
+                            foreach (Item item in _recptItemStore.ReceiptItems)
+                            {
+                                using (MySqlCommand cmd = new MySqlCommand(sqlAddRecptItems, _connStore.CurrentCon))
+                                {
+                                    cmd.Parameters.AddWithValue("@recpt_id", lastInsertedId);
+                                    cmd.Parameters.AddWithValue("@prod_upc", item.UPC);
+                                    cmd.Parameters.AddWithValue("@prod_desc", item.Description);
+                                    cmd.Parameters.AddWithValue("@prod_price", item.Price);
+                                    cmd.Parameters.AddWithValue("@prod_quan", item.Quantity);
+                                    cmd.Parameters.AddWithValue("@prod_tot_Price", item.TotalPrice);
+
+                                    var res = cmd.ExecuteNonQueryAsync().Result;
+                                }
+                            }
+
+                            //update the inventory in database
+                            string sqlUpdateInven = "UPDATE pos_1.products SET prod_inv = prod_inv - @prod_inv WHERE prod_upc = @prod_upc;";
+
+                            foreach (Item item in _recptItemStore.ReceiptItems)
+                            {
+                                bool parseRes = int.TryParse(item.UPC, out _);
+                                if (parseRes)
+                                {
+                                    using (MySqlCommand cmd = new MySqlCommand(sqlUpdateInven, _connStore.CurrentCon))
+                                    {
+                                        cmd.Parameters.AddWithValue("@prod_inv", item.Quantity);
+                                        cmd.Parameters.AddWithValue("@prod_upc", item.UPC);
+
+                                        var res = cmd.ExecuteNonQueryAsync().Result;
+                                    }
+                                }
+
+                            }
+
+                            //clear recipt
+                            _recptItemStore.ReceiptItems.Clear();
+                            for (int i = 0; i < 4; i++)
+                            {
+                                _recptAmountStore.RecptAmount[i] = 0.00;
+                            }
+                            _recptAmountStore.IsTaxFree = false;
+                            _recptAmountStore.TaxAmtStore = 0.0;
+
+                            //update due amount 
+                            _recptAmtDueStore.RecptDueAmount[1] = amtTendered;
+                            _recptAmtDueStore.RecptDueAmount[2] = 0.00;
+                            _recptAmtDueStore.RecptDueAmount[3] = change;
+
+                            //amounts
+                            AmountEntered = "0.00";
+                            _amtEnteredStr = "";
+                            _isNegSel = false;
+
+                            //compleate transaction
+                            transaction.Commit();
+
+                            //close the pay window
+                            _windowService.ClosePayWindow();
                         }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.InnerException.Message);
 
-                        //amounts
-                        AmountEntered = "0.00";
-                        _amtEnteredStr = "";
-                        _isNegSel = false;
+                            // If an exception occurred, rollback the transaction to undo the changes
+                            if (transaction != null)
+                            {
+                                transaction.Rollback();
+                                Console.WriteLine("Changes reverted successfully.");
+                            }
 
-                        //close the pay window
-                        _windowService.ClosePayWindow();
+                            _windowService.ClosePayWindow();
+                            return;
+                        }
+                        #endregion
 
                     }
                     else
@@ -233,6 +331,60 @@ namespace POS.MVVM.ViewModel
                         _recptAmtDueStore.RecptDueAmount[1] += amountEntered;
                         _recptAmtDueStore.RecptDueAmount[2] = 0;
                         _recptAmtDueStore.RecptDueAmount[3] = -(_recptAmtDueStore.RecptDueAmount[1]);
+
+                        try
+                        {
+                            int lastInsertedId = -1;
+                            string sqlQuery = "INSERT INTO pos_1.receipt (recpt_emp, recpt_subTotal, recpt_disc, recpt_tax, recpt_total) " +
+                                              "VALUES (@recpt_emp, @recpt_subTotal, @recpt_disc, @recpt_tax, @recpt_total);";
+                            using (MySqlCommand cmd = new MySqlCommand(sqlQuery, _connStore.CurrentCon))
+                            {
+                                cmd.Parameters.AddWithValue("@recpt_emp", Convert.ToInt16(_connStore.UserID));
+                                cmd.Parameters.AddWithValue("@recpt_subTotal", _recptAmountStore.RecptAmount[0]);
+                                cmd.Parameters.AddWithValue("@recpt_disc", _recptAmountStore.RecptAmount[1]);
+                                cmd.Parameters.AddWithValue("@recpt_tax", _recptAmountStore.RecptAmount[2]);
+                                cmd.Parameters.AddWithValue("@recpt_total", _recptAmountStore.RecptAmount[3]);
+
+                                // Execute the query and get the last inserted ID
+                                lastInsertedId = Convert.ToInt32(cmd.ExecuteScalar());
+                            }
+
+                            if (lastInsertedId < 0)
+                            {
+                                _windowService.ClosePayWindow();
+                                return;
+                            }
+
+                            try
+                            {
+                                sqlQuery = "INSERT INTO pos_1.product_to_receipt (recpt_id, prod_upc, prod_desc, prod_price, prod_quan, prod_tot_Price) " +
+                                           "VALUES (@recpt_id, @prod_upc, @prod_desc, @prod_price, @prod_quan, @prod_tot_Price);";
+                                foreach (Item item in _recptItemStore.ReceiptItems)
+                                {
+                                    using (MySqlCommand cmd = new MySqlCommand(sqlQuery, _connStore.CurrentCon))
+                                    {
+                                        cmd.Parameters.AddWithValue("@recpt_id", lastInsertedId);
+                                        cmd.Parameters.AddWithValue("@prod_upc", item.UPC);
+                                        cmd.Parameters.AddWithValue("@prod_desc", item.Description);
+                                        cmd.Parameters.AddWithValue("@prod_price", item.Price);
+                                        cmd.Parameters.AddWithValue("@prod_quan", item.Quantity);
+                                        cmd.Parameters.AddWithValue("@prod_tot_Price", item.TotalPrice);
+                                    }
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show(ex.Message);
+                                _windowService.ClosePayWindow();
+                                return;
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message);
+                            _windowService.ClosePayWindow();
+                            return;
+                        }
 
                         //clear recipt
                         _recptItemStore.ReceiptItems.Clear();
@@ -299,6 +451,9 @@ namespace POS.MVVM.ViewModel
             if (closed)
             {
                 Navigation.ChangeCustFaceView<CustFaceTotalViewModel>();
+                _recptAmountStore.IsTaxFree = false;
+                _recptAmountStore.RecptAmount[2] = _recptAmountStore.TaxAmtStore;
+                _recptAmountStore.RecptAmount[3] = _recptAmountStore.RecptAmount[0] + _recptAmountStore.RecptAmount[1] + _recptAmountStore.TaxAmtStore;
                 _recptAmountStore.RecptAmount = _recptAmountStore.UnChangeRecptAmount;
             }
         }
