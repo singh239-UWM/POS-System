@@ -168,6 +168,7 @@ namespace POS.MVVM.ViewModel
             Receipt = _receipItemStore.ReceiptItems;
             ICollectionView view = CollectionViewSource.GetDefaultView(Receipt);
             view.Refresh();
+            SelectedItem = _receipItemStore.SelectedItem;
         }
 
         private void ManualEntryVM_ReceiptSelectedItemChanged(object sender, EventArgs e)

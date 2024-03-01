@@ -39,6 +39,8 @@ namespace POS.MVVM.ViewModel
 
         #region Commands
         public RelayCommand OpenProdConfigComm { get; set; }
+        public RelayCommand OpenDeptConfigComm { get; set; }
+        public RelayCommand OpenMNMConfigComm { get; set; }
         public RelayCommand NavigateToManualEntryView { get; set; }
         public RelayCommand NavigateToOtherView { get; set; }
         #endregion
@@ -53,6 +55,8 @@ namespace POS.MVVM.ViewModel
 
             #region Commands Def assigning
             OpenProdConfigComm = new RelayCommand(o => { OpenProdConfig(); }, canExecute: o => true);
+            OpenDeptConfigComm = new RelayCommand(o => { OpenDeptConfig(); }, canExecute: o => true);
+            OpenMNMConfigComm = new RelayCommand(o => { OpenMNMConfig(); }, canExecute: o => true);
             NavigateToManualEntryView = new RelayCommand(o => { Navigation.NavigatDashBoardTabTo<ManualEntryViewModel>(); }, canExecute: o => true);
             NavigateToOtherView = new RelayCommand(o => { Navigation.NavigatDashBoardTabTo<CartViewModel>(); }, canExecute: o => true);
             #endregion
@@ -83,6 +87,30 @@ namespace POS.MVVM.ViewModel
                 MessageBox.Show("Could Not open Prod config window");
             }
 
+        }
+        private void OpenDeptConfig()
+        {
+            bool isOpend = _windowService.OpenDeptConfigWindow<DeptConfigViewModel>();
+            if (isOpend)
+            {
+                return;
+            }
+            else
+            {
+                MessageBox.Show("Could Not open Prod config window");
+            }
+        }
+        private void OpenMNMConfig()
+        {
+            bool isOpend = _windowService.OpenMNMConfigWindow<DeptConfigViewModel>();
+            if (isOpend)
+            {
+                return;
+            }
+            else
+            {
+                MessageBox.Show("Could Not open Mix-n-Match config window");
+            }
         }
         #endregion
 

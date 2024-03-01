@@ -9,21 +9,26 @@
              d:DataContext="{d:DesignInstance Type=viewmodel:ProductConfigViewModel}"
              mc:Ignorable="d" 
              Height="620" Width="1100">
-    <Border CornerRadius="2,2,2,2" BorderBrush="#FF32936F" BorderThickness="2,2,2,2">
-        <Grid Margin="10,10,10,10">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="0.6*" />
-                <ColumnDefinition Width="0.4*" />
-            </Grid.ColumnDefinitions>
+    <Border Padding="10,10,10,10">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="10" Color="Black" ShadowDepth="2"/>
+        </Border.Effect>
+        <!-- Add your user control content here -->
+        <Border Background="White" CornerRadius="2,2,2,2" BorderBrush="#FF32936F" BorderThickness="2,2,2,2" >
+            <Grid Margin="10,10,10,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.6*" />
+                    <ColumnDefinition Width="0.4*" />
+                </Grid.ColumnDefinitions>
 
-            <Grid Grid.Column="0" Margin="5,5,5,5">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="70" />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
-                
-                <StackPanel Orientation="Horizontal" Margin="8,8,8,8" VerticalAlignment="Top">
-                    <ui:Button FontFamily="/Resources/Fonts/#IBM Plex Sans"
+                <Grid Grid.Column="0" Margin="5,5,5,5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="70" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Orientation="Horizontal" Margin="8,8,8,8" VerticalAlignment="Top">
+                        <ui:Button FontFamily="/Resources/Fonts/#IBM Plex Sans"
                        Content="Sales"
                        Background="{x:Null}" 
                        Foreground="#32936F" 
@@ -34,7 +39,7 @@
                        PressedBackground="#7F32936F" 
                        Padding="5,5,5,5" BorderBrush="#32936F" Height="50" Width="100"/>
 
-                    <ui:Button FontFamily="/Resources/Fonts/#IBM Plex Sans"
+                        <ui:Button FontFamily="/Resources/Fonts/#IBM Plex Sans"
                        Content="Other"
                        Background="{x:Null}" 
                        Foreground="#32936F" 
@@ -44,143 +49,143 @@
                        Cursor="Hand" 
                        PressedBackground="#7F32936F" 
                        Padding="5,5,5,5" BorderBrush="#32936F" Height="50" Width="100"/>
-                </StackPanel>
+                    </StackPanel>
 
-                <ContentControl Grid.Row="1" />
+                    <ContentControl Grid.Row="1" />
 
-            </Grid>
+                </Grid>
 
-            <Grid Grid.Column="1" Margin="5,5,5,5">
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
-
-                <!--top grid-->
-                <Grid>
+                <Grid Grid.Column="1" Margin="5,5,5,5">
                     <Grid.RowDefinitions>
                         <RowDefinition />
                         <RowDefinition />
-                        <RowDefinition />
-                        <RowDefinition />
-                        <RowDefinition />
                     </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                        <ColumnDefinition Width="50" />
-                    </Grid.ColumnDefinitions>
 
-                    <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,4,0">
-                        <TextBlock Text="Department"
+                    <!--top grid-->
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="50" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,4,0">
+                            <TextBlock Text="Department"
                                    Foreground="#FF004346"
                                    FontFamily="/Resources/Fonts/#IBM Plex Sans"
                                    HorizontalAlignment="Left" 
                                    FontSize="14"/>
-                        <ComboBox x:Name="department_Field"
+                            <ComboBox x:Name="department_Field"
                                   ItemsSource="{Binding Departments, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                   SelectedItem="{Binding ProdDept, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                   FontFamily="/Resources/Fonts/#IBM Plex Sans"
-                                  FontSize="16" /> 
-                    </StackPanel>
+                                  FontSize="16" />
+                        </StackPanel>
 
-                    <StackPanel Grid.Row="0" Grid.Column="1" Margin="0,0,4,0">
-                        <TextBlock Text="Cost"
+                        <StackPanel Grid.Row="0" Grid.Column="1" Margin="0,0,4,0">
+                            <TextBlock Text="Cost"
                                    Foreground="#FF004346"
                                    FontFamily="/Resources/Fonts/#IBM Plex Sans"
                                    HorizontalAlignment="Left" 
                                    FontSize="14"/>
-                        <ui:TextBox x:Name="cost_Field"
+                            <ui:TextBox x:Name="cost_Field"
                                     Text="{Binding ProdCost, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                     FontFamily="/Resources/Fonts/#IBM Plex Sans"
                                     FontSize="16" />
-                    </StackPanel>
+                        </StackPanel>
 
-                    <StackPanel Grid.Row="0" Grid.Column="2">
-                        <TextBlock Text="Tax"
+                        <StackPanel Grid.Row="0" Grid.Column="2">
+                            <TextBlock Text="Tax"
                                    Foreground="#FF004346"
                                    FontFamily="/Resources/Fonts/#IBM Plex Sans"
                                    HorizontalAlignment="Left" 
                                    FontSize="14"/>
-                        <CheckBox Width="50"
+                            <CheckBox Width="50"
                                   IsChecked="{Binding ProdIsTaxable, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                    </StackPanel>
-                    
-                    <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,4,0">
-                        <TextBlock Text="UPC"
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,4,0">
+                            <TextBlock Text="UPC"
                                    Foreground="#FF004346"
                                    FontFamily="/Resources/Fonts/#IBM Plex Sans"
                                    HorizontalAlignment="Left" 
                                    FontSize="14"/>
-                        <ui:TextBox x:Name="upc_Field"
+                            <ui:TextBox x:Name="upc_Field"
                                     Text="{Binding ProdUPC, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                     IsHitTestVisible="{Binding IsUPCEna}"
                                     FontFamily="/Resources/Fonts/#IBM Plex Sans"
                                     FontSize="16" />
-                    </StackPanel>
+                        </StackPanel>
 
-                    <StackPanel Grid.Row="1" Grid.Column="1" Margin="0,0,4,0">
-                        <TextBlock Text="Retail"
+                        <StackPanel Grid.Row="1" Grid.Column="1" Margin="0,0,4,0">
+                            <TextBlock Text="Retail"
                                    Foreground="#FF004346"
                                    FontFamily="/Resources/Fonts/#IBM Plex Sans"
                                    HorizontalAlignment="Left" 
                                    FontSize="14"/>
-                        <ui:TextBox x:Name="price_Field"
+                            <ui:TextBox x:Name="price_Field"
                                     Text="{Binding ProdRetail, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                     FontFamily="/Resources/Fonts/#IBM Plex Sans"
                                     FontSize="16" />
-                    </StackPanel>
+                        </StackPanel>
 
-                    <StackPanel Grid.Row="2" Grid.Column="0" Margin="0,0,4,0">
-                        <TextBlock Text="Description"
+                        <StackPanel Grid.Row="2" Grid.Column="0" Margin="0,0,4,0">
+                            <TextBlock Text="Description"
                                    Foreground="#FF004346"
                                    FontFamily="/Resources/Fonts/#IBM Plex Sans"
                                    HorizontalAlignment="Left" 
                                    FontSize="14"/>
-                        <ui:TextBox x:Name="descr_Field"
+                            <ui:TextBox x:Name="descr_Field"
                                     Text="{Binding ProdDesc, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                     FontFamily="/Resources/Fonts/#IBM Plex Sans"
                                     FontSize="16" />
-                    </StackPanel>
+                        </StackPanel>
 
-                    <StackPanel Grid.Row="2" Grid.Column="1" Margin="0,0,4,0">
-                        <TextBlock Text="Total Price"
+                        <StackPanel Grid.Row="2" Grid.Column="1" Margin="0,0,4,0">
+                            <TextBlock Text="Total Price"
                                    Foreground="#FF004346"
                                    FontFamily="/Resources/Fonts/#IBM Plex Sans"
                                    HorizontalAlignment="Left" 
                                    FontSize="14"/>
-                        <ui:TextBox x:Name="totalPrice_Field"
+                            <ui:TextBox x:Name="totalPrice_Field"
                                     Text="{Binding ProdCost, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                     FontFamily="/Resources/Fonts/#IBM Plex Sans"
                                     FontSize="16" />
-                    </StackPanel>
+                        </StackPanel>
 
-                    <StackPanel Grid.Row="3" Grid.Column="0" Margin="0,0,4,0">
-                        <TextBlock Text="Second Description"
+                        <StackPanel Grid.Row="3" Grid.Column="0" Margin="0,0,4,0">
+                            <TextBlock Text="Second Description"
                                    Foreground="#FF004346"
                                    FontFamily="/Resources/Fonts/#IBM Plex Sans"
                                    HorizontalAlignment="Left" 
                                    FontSize="14"/>
-                        <ui:TextBox x:Name="secondDescr_Field"
+                            <ui:TextBox x:Name="secondDescr_Field"
                                     Text="{Binding ProdSecDesc, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                     FontFamily="/Resources/Fonts/#IBM Plex Sans"
                                     FontSize="16" />
-                    </StackPanel>
+                        </StackPanel>
 
-                    <StackPanel Grid.Row="3" Grid.Column="1" Margin="0,0,4,0">
-                        <TextBlock Text="Inventory"
+                        <StackPanel Grid.Row="3" Grid.Column="1" Margin="0,0,4,0">
+                            <TextBlock Text="Inventory"
                                    Foreground="#FF004346"
                                    FontFamily="/Resources/Fonts/#IBM Plex Sans"
                                    HorizontalAlignment="Left" 
                                    FontSize="14"/>
-                        <ui:TextBox x:Name="inv_Field"
+                            <ui:TextBox x:Name="inv_Field"
                                     Text="{Binding ProdInv, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                     IsHitTestVisible="{Binding IsInvEna}"
                                     FontFamily="/Resources/Fonts/#IBM Plex Sans"
                                     FontSize="16" />
-                    </StackPanel>
+                        </StackPanel>
 
-                    <ui:Button Content="Save" 
+                        <ui:Button Content="Save" 
                                FontFamily="/Resources/Fonts/#IBM Plex Sans"
                                Icon="Save20"
                                Command="{Binding SaveItemComm}"
@@ -193,24 +198,25 @@
                                MouseOverBackground="#CC32936F" 
                                Cursor="Hand" 
                                PressedBackground="#7F32936F" Grid.Row="4" Height="50" Margin="0,0,4,0" />
-                </Grid>
-                
-                <!--bottom grid-->
-                <Grid Grid.Row="1" Margin="5,5,5,5" >
-                    <StackPanel VerticalAlignment="Bottom">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition />
-                                <RowDefinition />
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition />
-                                <ColumnDefinition />
-                                <ColumnDefinition />
-                                <ColumnDefinition />
-                            </Grid.ColumnDefinitions>
 
-                            <ui:Button Grid.Column="0" Grid.Row="0"
+                    </Grid>
+
+                    <!--bottom grid-->
+                    <Grid Grid.Row="1" Margin="5,5,5,5" >
+                        <StackPanel VerticalAlignment="Bottom">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+
+                                <ui:Button Grid.Column="0" Grid.Row="0"
                                        FontFamily="/Resources/Fonts/#IBM Plex Sans"
                                        Content="Delete"
                                        IsEnabled="{Binding IsDelButtonEna}"
@@ -226,7 +232,7 @@
                                        Foreground="#FFB55656"
                                        BorderThickness="2,2,2,2" Margin="0,0,4,4" Height="55" />
 
-                            <ui:Button Grid.Column="1" Grid.Row="0"
+                                <ui:Button Grid.Column="1" Grid.Row="0"
                                        FontFamily="/Resources/Fonts/#IBM Plex Sans"
                                        Content="Add Item"
                                        IsEnabled="{Binding IsAddButtonEna}"
@@ -242,7 +248,7 @@
                                        Foreground="#FF004346"
                                        BorderThickness="2,2,2,2" Margin="0,0,4,4" Height="55" />
 
-                            <ui:Button Grid.Column="2" Grid.Row="0"
+                                <ui:Button Grid.Column="2" Grid.Row="0"
                                        FontFamily="/Resources/Fonts/#IBM Plex Sans"
                                        Content="Dup. Item"
                                        IsEnabled="{Binding IsDupButtonEna}"
@@ -258,7 +264,7 @@
                                        Foreground="#FF004346"
                                        BorderThickness="2,2,2,2" Margin="0,0,4,4" Height="55" />
 
-                            <ui:Button Grid.Column="3" Grid.Row="0"
+                                <ui:Button Grid.Column="3" Grid.Row="0"
                                        FontFamily="/Resources/Fonts/#IBM Plex Sans"
                                        Content="Inst. P.O."
                                        IsEnabled="{Binding IsPOButtonEna}"
@@ -273,8 +279,8 @@
                                        BorderBrush="#FF32936F" 
                                        Foreground="#FF004346"
                                        BorderThickness="2,2,2,2" Margin="0,0,4,4" Height="55" />
-                            
-                            <ui:Button Grid.Column="2" Grid.Row="1"
+
+                                <ui:Button Grid.Column="2" Grid.Row="1"
                                        FontFamily="/Resources/Fonts/#IBM Plex Sans"
                                        Content="Look Up"
                                        IsEnabled="{Binding IsLookButtonEna}"
@@ -290,7 +296,7 @@
                                        Foreground="#FF004346"
                                        BorderThickness="2,2,2,2" Margin="0,0,4,0" Height="55" />
 
-                            <ui:Button Grid.Column="3" Grid.Row="1"
+                                <ui:Button Grid.Column="3" Grid.Row="1"
                                        FontFamily="/Resources/Fonts/#IBM Plex Sans"
                                        Content="Exit"
                                        Command="{Binding CloseProdConfigComm}"
@@ -305,28 +311,29 @@
                                        Foreground="#FFB55656"
                                        BorderThickness="2,2,2,2" Margin="0,0,4,0" Height="55" />
 
-                            <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,4,0" Grid.ColumnSpan="2" Height="55">
-                                <TextBlock Text="Enter Item Description:"
+                                <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,4,0" Grid.ColumnSpan="2" Height="55">
+                                    <TextBlock Text="Enter Item Description:"
                                            Foreground="#FF004346"
                                            FontFamily="/Resources/Fonts/#IBM Plex Sans"
                                            HorizontalAlignment="Left" 
                                            FontSize="14"/>
-                                <ui:TextBox x:Name="upcSearch_Field"
+                                    <ui:TextBox x:Name="upcSearch_Field"
                                             Text="{Binding UPCEntered, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                             FontFamily="/Resources/Fonts/#IBM Plex Sans"
                                             FontSize="16" VerticalAlignment="Stretch" Height="38" >
-                                    <ui:TextBox.InputBindings>
-                                        <KeyBinding Key="Return" Command="{Binding UPCEnterCommand}" />
-                                    </ui:TextBox.InputBindings>
-                                </ui:TextBox>
-                                    
-                            </StackPanel>
-                        </Grid>
-                    </StackPanel>
+                                        <ui:TextBox.InputBindings>
+                                            <KeyBinding Key="Return" Command="{Binding UPCEnterCommand}" />
+                                        </ui:TextBox.InputBindings>
+                                    </ui:TextBox>
+
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                    </Grid>
+
                 </Grid>
-                
+
             </Grid>
-            
-        </Grid>
+        </Border>
     </Border>
 </UserControl>

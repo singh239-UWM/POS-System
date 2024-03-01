@@ -192,16 +192,17 @@ namespace POS.MVVM.ViewModel
             if (isTaxed) //taxed
             {
                 Item item = new Item(department, department, amount, 1, isTaxed);
+                //_receipItemStore.SelectedItem = item;
                 _receipItemStore.ReceiptItems.Add(item);
                 _recptAmountStore.RecptAmount[0] += amount;
                 _recptAmountStore.RecptAmount[2] += ((_recptAmountStore.IsTaxFree) ? 0.00 : (amount * 0.055));
                 _recptAmountStore.RecptAmount[3] = _recptAmountStore.RecptAmount[0] + _recptAmountStore.RecptAmount[1] + _recptAmountStore.RecptAmount[2];
 
                 _recptAmountStore.TaxAmtStore += (amount * 0.055);
+                ReceiptItemChanged?.Invoke(this, EventArgs.Empty);
 
                 _receipItemStore.SelectedItem = item;
                 ReceiptSelectedItemChanged?.Invoke(this, EventArgs.Empty);
-                ReceiptItemChanged?.Invoke(this, EventArgs.Empty);
 
                 AmountEntered = "0.00";
                 _amtEnteredStr = "";
@@ -210,16 +211,17 @@ namespace POS.MVVM.ViewModel
             else //non taxed
             {
                 Item item = new Item(department, department, amount, 1, isTaxed);
+                //_receipItemStore.SelectedItem = item;
                 _receipItemStore.ReceiptItems.Add(item);
                 _recptAmountStore.RecptAmount[0] += amount;
                 _recptAmountStore.RecptAmount[2] += 0.00;
                 _recptAmountStore.RecptAmount[3] = _recptAmountStore.RecptAmount[0] + _recptAmountStore.RecptAmount[1] + _recptAmountStore.RecptAmount[2];
 
                 _recptAmountStore.TaxAmtStore += 0.00;
+                ReceiptItemChanged?.Invoke(this, EventArgs.Empty);
 
                 _receipItemStore.SelectedItem = item;
                 ReceiptSelectedItemChanged?.Invoke(this, EventArgs.Empty);
-                ReceiptItemChanged?.Invoke(this, EventArgs.Empty);
 
                 AmountEntered = "0.00";
                 _amtEnteredStr = "";
@@ -244,10 +246,10 @@ namespace POS.MVVM.ViewModel
 
                 _recptAmountStore.TaxAmtStore += taxPerItem;
 
-                _receipItemStore.SelectedItem = _receipItemStore.ReceiptItems.ElementAt(index);
-
-                ReceiptSelectedItemChanged?.Invoke(this, EventArgs.Empty);
                 ReceiptItemChanged?.Invoke(this, EventArgs.Empty);
+
+                _receipItemStore.SelectedItem = _receipItemStore.ReceiptItems.ElementAt(index);
+                ReceiptSelectedItemChanged?.Invoke(this, EventArgs.Empty);
 
                 AmountEntered = "0.00";
                 _amtEnteredStr = "";
@@ -264,14 +266,19 @@ namespace POS.MVVM.ViewModel
                 _recptAmountStore.RecptAmount[2] += 0.00; //tax
                 _recptAmountStore.RecptAmount[3] = _recptAmountStore.RecptAmount[0] + _recptAmountStore.RecptAmount[1] + _recptAmountStore.RecptAmount[2];
 
-                ReceiptSelectedItemChanged?.Invoke(this, EventArgs.Empty);
+                /*ReceiptItemChanged?.Invoke(this, EventArgs.Empty);
+                _receipItemStore.SelectedItem = _receipItemStore.ReceiptItems.ElementAt(index);
+                ReceiptSelectedItemChanged?.Invoke(this, EventArgs.Empty);*/
+
                 ReceiptItemChanged?.Invoke(this, EventArgs.Empty);
+
+                _receipItemStore.SelectedItem = _receipItemStore.ReceiptItems.ElementAt(index);
+                ReceiptSelectedItemChanged?.Invoke(this, EventArgs.Empty);
 
                 AmountEntered = "0.00";
                 _amtEnteredStr = "";
                 return;
             }
-
         }
     }
 }

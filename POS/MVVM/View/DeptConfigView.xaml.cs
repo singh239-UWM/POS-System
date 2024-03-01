@@ -16,18 +16,13 @@ using System.Windows.Shapes;
 namespace POS.MVVM.View
 {
     /// <summary>
-    /// Interaction logic for CartView.xaml
+    /// Interaction logic for DeptConfigView.xaml
     /// </summary>
-    public partial class CartView : UserControl
+    public partial class DeptConfigView : UserControl
     {
-        public CartView()
+        public DeptConfigView()
         {
             InitializeComponent();
-        }
-
-        private void RecptSelectionChange(object sender, RoutedEventArgs e)
-        {
-            receiptListView.ScrollIntoView(receiptListView.SelectedValue);
         }
     }
 }

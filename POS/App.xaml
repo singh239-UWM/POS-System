@@ -43,6 +43,14 @@
             <DataTemplate DataType="{x:Type viewModel:ProductConfigViewModel}">
                 <view:ProductConfigView />
             </DataTemplate>
+            
+            <DataTemplate DataType="{x:Type viewModel:DeptConfigViewModel}">
+                <view:DeptConfigView />
+            </DataTemplate>
+            
+            <DataTemplate DataType="{x:Type viewModel:MixnMatchConfigViewModel}">
+                <view:MixnMatchConfigView />
+            </DataTemplate>
 
         </ResourceDictionary>
     </Application.Resources>

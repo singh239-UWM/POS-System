@@ -64,6 +64,8 @@
                 <ListView x:Name="receiptListView"
                           Grid.Row="2"
                           ItemsSource="{Binding RecptItemsStore.ReceiptItems}"
+                          SelectedItem="{Binding RecptItemsStore.SelectedItem}"
+                          SelectionChanged="ReceiptListView_SelectionChanged"
                           SelectionMode="Single"
                           Margin="9,0,-9,0">
                     <ListView.ItemTemplate>

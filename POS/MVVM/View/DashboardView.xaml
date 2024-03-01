@@ -5,7 +5,8 @@
              xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:POS.MVVM.View"
-             xmlns:POS="clr-namespace:POS" xmlns:viewmodel="clr-namespace:POS.MVVM.ViewModel" 
+             xmlns:POS="clr-namespace:POS" 
+             xmlns:viewmodel="clr-namespace:POS.MVVM.ViewModel" 
              d:DataContext="{d:DesignInstance Type=viewmodel:DashboardViewModel}" 
              mc:Ignorable="d"
              d:Height="Auto"
@@ -100,10 +101,43 @@
                 <RowDefinition />
             </Grid.RowDefinitions>
 
+            <!--inventory button-->
             <ui:Button Grid.Column="0" Grid.Row="0"
                        FontFamily="/Resources/Fonts/#IBM Plex Sans"
                        Command="{Binding OpenProdConfigComm}"
-                       Content="Inventory"
+                       Content="Manage Inv."
+                       Background="{x:Null}" 
+                       Foreground="#32936F" 
+                       FontSize="16"
+                       IconForeground="#E4FFFFFF"
+                       MouseOverBackground="#CC32936F" 
+                       Cursor="Hand" 
+                       PressedBackground="#7F32936F"
+                       VerticalAlignment="Center" 
+                       HorizontalAlignment="Stretch" Margin="4,4,4,4" 
+                       Padding="5,5,5,5" BorderBrush="#32936F" Height="50"/>
+
+            <!--Manage Depart button-->
+            <ui:Button Grid.Column="0" Grid.Row="1"
+                       FontFamily="/Resources/Fonts/#IBM Plex Sans"
+                       Command="{Binding OpenDeptConfigComm}"
+                       Content="Manage Depart."
+                       Background="{x:Null}" 
+                       Foreground="#32936F" 
+                       FontSize="16"
+                       IconForeground="#E4FFFFFF"
+                       MouseOverBackground="#CC32936F" 
+                       Cursor="Hand" 
+                       PressedBackground="#7F32936F"
+                       VerticalAlignment="Center" 
+                       HorizontalAlignment="Stretch" Margin="4,4,4,4" 
+                       Padding="5,5,5,5" BorderBrush="#32936F" Height="50"/>
+            
+            <!--Mix-n-Match button-->
+            <ui:Button Grid.Column="1" Grid.Row="0"
+                       FontFamily="/Resources/Fonts/#IBM Plex Sans"
+                       Command="{Binding OpenMNMConfigComm}"
+                       Content="Mix-n-Match"
                        Background="{x:Null}" 
                        Foreground="#32936F" 
                        FontSize="16"

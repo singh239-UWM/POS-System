@@ -81,7 +81,7 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
                         <ColumnDefinition Width="140" />
-                        <ColumnDefinition Width="180" />
+                        <ColumnDefinition Width="160" />
                     </Grid.ColumnDefinitions>
 
                     <TextBlock Text="Description"
@@ -126,10 +126,10 @@
                                     <RowDefinition />
                                 </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="5*" />
-                                    <ColumnDefinition Width="80" />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition Width="100" />
                                     <ColumnDefinition Width="140" />
-                                    <ColumnDefinition Width="180"  />
+                                    <ColumnDefinition Width="160"  />
                                 </Grid.ColumnDefinitions>
 
                                 <TextBlock Text="{Binding UPC}"
@@ -137,17 +137,24 @@
                                            Foreground="black"
                                            FontFamily="/Resources/Fonts/#IBM Plex Sans" 
                                            FontSize="18"/>
-                                <TextBlock Text="{Binding Description}"
+                                <TextBlock x:Name="itemDesc" Text="{Binding Description}"
                                            Grid.Row="1"
                                            Foreground="black"
                                            FontFamily="/Resources/Fonts/#IBM Plex Sans" 
-                                           FontSize="18" Grid.ColumnSpan="2"/>
+                                           FontSize="18"/>
                                 <TextBlock Text="{Binding Price, StringFormat={}{0}/ea.}"
                                            Grid.Row="0"
                                            Foreground="black"
                                            FontFamily="/Resources/Fonts/#IBM Plex Sans" 
                                            FontSize="18" 
                                            Grid.Column="1" HorizontalAlignment="Right"/>
+                                <TextBlock Text="99@$100.99"
+                                           TextAlignment="Right"
+                                           Grid.Row="1"
+                                           Grid.Column="1"
+                                           Foreground="black"
+                                           FontFamily="/Resources/Fonts/#IBM Plex Sans" 
+                                           FontSize="18" />
                                 <TextBlock Text="{Binding Quantity}"
                                            Grid.Column="2"
                                            Grid.RowSpan="2"
@@ -172,7 +179,7 @@
             </Grid>
             <!--#endregion-->
 
-            <ContentControl Grid.Row="2"
+            <ContentControl x:Name="amountDescCC" Grid.Row="2"
                             Content="{Binding Path=Navigation.CustFaceVM}">
                 
             </ContentControl>

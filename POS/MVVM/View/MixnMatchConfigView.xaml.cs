@@ -16,18 +16,13 @@ using System.Windows.Shapes;
 namespace POS.MVVM.View
 {
     /// <summary>
-    /// Interaction logic for CartView.xaml
+    /// Interaction logic for MixnMatchConfigView.xaml
     /// </summary>
-    public partial class CartView : UserControl
+    public partial class MixnMatchConfigView : UserControl
     {
-        public CartView()
+        public MixnMatchConfigView()
         {
             InitializeComponent();
-        }
-
-        private void RecptSelectionChange(object sender, RoutedEventArgs e)
-        {
-            receiptListView.ScrollIntoView(receiptListView.SelectedValue);
         }
     }
 }

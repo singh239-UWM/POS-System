@@ -29,11 +29,7 @@ namespace POS.MVVM.ViewModel
         public ReceiptItemsStore RecptItemsStore
         {
             get { return _recptItemsStore; }
-            set
-            {
-                _recptItemsStore = value;
-                OnPropertyChanged();
-            }
+            
         }
 
         public CustFaceViewModel(ReceiptItemsStore receiptItemsStore, INavigationService navigation)

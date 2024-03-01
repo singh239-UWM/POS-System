@@ -46,6 +46,8 @@ namespace POS
             services.AddSingleton<CustFaceDueViewModel>();
             services.AddSingleton<ManualEntryViewModel>();
             services.AddSingleton<ProductConfigViewModel>();
+            services.AddSingleton<DeptConfigViewModel>();
+            services.AddSingleton<MixnMatchConfigViewModel>();
             services.AddSingleton<ConnStore>();
             services.AddSingleton<ReceiptAmountStore>();
             services.AddSingleton<ReceiptItemsStore>();
@@ -66,6 +68,7 @@ namespace POS
             var customerWindow = _serviceProvider.GetRequiredService<CustomerFaceWindow>();
             mainWindow.Show();
             customerWindow.Show();
+            customerWindow.Title = "Customer Facing Window";
             base.OnStartup(e);
         }
     }

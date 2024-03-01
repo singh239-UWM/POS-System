@@ -14,6 +14,22 @@
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>C:\Users\Baljinder Singh\Documents\POS\build\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -33,6 +49,18 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>127264E0070ABC75EEC46EC48D1F139FF1673F9B</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>POS_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="BouncyCastle.Crypto, Version=1.9.0.0, Culture=neutral, PublicKeyToken=0e99375e54769942, processorArchitecture=MSIL">
@@ -129,7 +157,9 @@
     <Compile Include="MVVM\ViewModel\CustFaceDueViewModel.cs" />
     <Compile Include="MVVM\ViewModel\CustFaceTotalViewModel.cs" />
     <Compile Include="MVVM\ViewModel\CustFaceViewModel.cs" />
+    <Compile Include="MVVM\ViewModel\DeptConfigViewModel.cs" />
     <Compile Include="MVVM\ViewModel\ManualEntryViewModel.cs" />
+    <Compile Include="MVVM\ViewModel\MixnMatchConfigViewModel.cs" />
     <Compile Include="MVVM\ViewModel\PayViewModel.cs" />
     <Compile Include="MVVM\ViewModel\ProductConfigViewModel.cs" />
     <Compile Include="MVVM\View\CartView.xaml.cs">
@@ -142,8 +172,14 @@
     <Compile Include="MVVM\View\CustFaceTotalView.xaml.cs">
       <DependentUpon>CustFaceTotalView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MVVM\View\DeptConfigView.xaml.cs">
+      <DependentUpon>DeptConfigView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MVVM\View\ManualEntryView.xaml.cs">
       <DependentUpon>ManualEntryView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\View\MixnMatchConfigView.xaml.cs">
+      <DependentUpon>MixnMatchConfigView.xaml</DependentUpon>
     </Compile>
     <Compile Include="MVVM\View\PayView.xaml.cs">
       <DependentUpon>PayView.xaml</DependentUpon>
@@ -178,6 +214,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="MVVM\View\DeptConfigView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MVVM\View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -201,6 +241,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="MVVM\View\ManualEntryView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MVVM\View\MixnMatchConfigView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -256,6 +300,7 @@
     <Resource Include="Fonts\IBMPlexSans-Thin.ttf" />
     <Resource Include="Fonts\IBMPlexSans-ThinItalic.ttf" />
     <None Include="packages.config" />
+    <None Include="POS_TemporaryKey.pfx" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -267,6 +312,18 @@
   <ItemGroup>
     <Folder Include="Images\" />
     <Folder Include="Themes\" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.7.2 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
